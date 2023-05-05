@@ -1,0 +1,1111 @@
+# Load programs etc.
+import os
+
+# pip install --upgrade pip
+# pip install pandas
+import pandas as pd
+from sklearn.linear_model import Ridge
+from sklearn.linear_model import Lasso
+from sklearn.linear_model import ElasticNet
+from sklearn.impute import SimpleImputer
+from sklearn.linear_model import LinearRegression
+from sklearn.neural_network import MLPRegressor
+from sklearn.svm import SVR
+from sklearn.neural_network import MLPRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import make_scorer, mean_absolute_error, mean_squared_error, r2_score
+
+# Set the path to desktop directory
+desktop_path = os.path.join(os.path.expanduser('~'), 'Desktop')
+
+# Print the path to verify it is correct
+print(desktop_path)
+
+# Read the CSV file into a pandas dataframe
+df = pd.read_csv(os.path.join(desktop_path, 'EnglandScotlandDataForPython.csv'))
+
+print(df.head())
+print(df.columns)
+print(df.dtypes)
+
+# View the unique values in a column named 'column_name'
+print(df['Year'].unique())
+print(df['Sex'].unique())
+print(df['Geography'].unique())
+print(df['Theme'].unique())
+print(df['RenamedIndicator'].unique())
+print(df['IndicatorForPython'].unique())
+print(df['OriginalIndicator'].unique())
+print(df['DATA'].unique())
+
+# Sex
+# Cleaning values in 'Sex'
+dfCleaning = df
+dfCleaning['Sex'] = dfCleaning['Sex'].replace(['Persons', 'All'], 'Person')
+
+# Create a dictionary to map the text values to numeric values
+sex_mapping = {'Female': 2, 'Male': 1, 'Person': 3}
+
+# Replace the text values in the 'Sex' column with their corresponding numeric values
+dfCleaning['Sex'] = dfCleaning['Sex'].replace(sex_mapping)
+print(dfCleaning['Sex'].unique())
+
+# Geography
+# Create a dictionary to map the text values to numeric values
+geog_mapping = {'England': 1, 'Scotland': 2}
+
+# Replace the text values in the 'Geography' column with their corresponding numeric values
+dfCleaning['Geography'] = dfCleaning['Geography'].replace(geog_mapping)
+
+
+# Year
+# Define the year mapping dictionary
+year_mapping = {
+    '2007/08': '2007',
+    '2005/06': '2005',
+    '2006/07': '2006',
+    '2008/09': '2008',
+    '2009/10': '2009',
+    '2010/11': '2010',
+    '2011/12': '2011',
+    '2012/13': '2012',
+    '2013/14': '2013',
+    '2014/15': '2014',
+    '2015/16': '2015',
+    '2016/17': '2016',
+    '2017/18': '2017',
+    '2018/19': '2018',
+    '2019/20': '2019',
+    '2020/21': '2020',
+    '2021/22': '2021'
+}
+
+# Replace the year values using the year_mapping dictionary
+dfCleaning['Year'] = dfCleaning['Year'].replace(year_mapping)
+
+# Print unique year values
+print(dfCleaning['Year'].unique())
+
+# Data labels
+# Define the value label mapping dictionary
+value_label_mapping = {
+    "All Heart & Circulatory diseases %": "All Heart & Circulatory diseases (count)",
+    "Atrial fibrillation %": "Atrial fibrillation (count)",
+    "Coronary Heart Disease %": "Coronary Heart Disease (count)",
+    "Heart Failure %": "Heart Failure (count)",
+    "Myocardial infarction %": "Myocardial infarction (count)",
+    "Other cardiovascular disease %": "Other cardiovascular disease (count)",
+    "Stroke %": "Stroke (count)"
+}
+
+# Replace the value labels in the 'IndicatorForPython' column using the value_label_mapping dictionary
+dfCleaning['IndicatorForPython'] = dfCleaning['IndicatorForPython'].replace(value_label_mapping)
+
+# Numeric form
+# List of columns to convert to numeric form
+columns_to_convert = ['Geography', 'Year', 'DATA']
+# Convert each column in the list to numeric form
+for col in columns_to_convert:
+    dfCleaning[col] = pd.to_numeric(dfCleaning[col], errors='coerce')
+
+# If you want to see the data types of your DataFrame columns after conversion, you can print them
+print(dfCleaning.dtypes)
+
+# Check changes
+# Print the column headings and data types using the .info() method
+dfCleaning.info()
+
+# Print the column headings
+print("Column Headings:")
+print(dfCleaning.columns)
+print()
+
+# Print the data types of each column
+print("Data Types:")
+print(dfCleaning.dtypes)
+# Define the file path where you want to save the CSV file (change the path according to your system)
+file_path = "/Users/KarenMarter/Desktop/dfCleaning.csv"
+
+# Export the DataFrame to a CSV file
+print("Exporting cleaned data to csv to check")
+dfCleaning.to_csv(file_path, index=False)
+
+# Transform / reshape
+# Reshape the DataFrame using pivot_table()
+cleaningReshaped = dfCleaning.pivot_table(values='DATA', index=['Year', 'Sex', 'Geography'], columns='IndicatorForPython', aggfunc='mean')
+
+# Reset the index to convert the pivot table back to a DataFrame
+dfCleaningReshaped = cleaningReshaped.reset_index()
+
+# Drop data before 2007
+dfCleaningReshaped = dfCleaningReshaped.query('Year >= 2007')
+
+# Define the file path where you want to save the reshaped CSV file (change the path according to your system)
+file_path_reshaped = "/Users/KarenMarter/Desktop/dfCleaningReshaped.csv"
+
+# Export the reshaped DataFrame to a CSV file
+print("Exporting reshaped data to csv to check")
+dfCleaningReshaped.to_csv(file_path_reshaped, index=False)
+
+# Exploring % of missing data
+grouped_by_sex_geography = dfCleaningReshaped.groupby(['Sex', 'Geography'])
+proportions_by_sex_geography = grouped_by_sex_geography.apply(lambda group: group.notna().mean() * 100)
+
+# Save the results to a CSV file
+output_file = "/Users/KarenMarter/Desktop/proportions_by_sex_geography.csv"
+proportions_by_sex_geography.to_csv(output_file)
+
+print(f"Proportion of non-missing cells for each column, split by 'Sex' and 'Geography' saved to {output_file}")
+
+# Decision to drop any variables? To then impute with variables with the appropriate %
+# Choices for Scotland & separate imputation
+# Filter the DataFrame for rows with 'Geography' value '2'
+df_geography_2 = dfCleaningReshaped.query('Geography == 2')
+# Create a copy of the filtered DataFrame
+df_geography_2_copy = df_geography_2.copy()
+# List of columns to keep
+columns_to_keep = [
+    'Year',
+    'Sex',
+    'Geography',
+    'Activity / Exercise - Percentage of physically active adults',
+    'Activity / Exercise - Summary activity levels - Low activity',
+    'Activity / Exercise - Summary activity levels - Very low activity',
+    'Age - Median age (years)',
+    'Age - Median age of death (years)',
+    'Alcohol - Alcohol consumption (mean weekly units)',
+    'All Heart & Circulatory diseases (count)',
+    'Atrial Fib - Diagnosed Atrial Fibrillation',
+    'Atrial fibrillation (count)',
+    'CVD %',
+    'Coronary Heart Disease (count)',
+    'Current smoker %',
+    'Current smoker % (other measure)',
+    'Ex-smoker %',
+    'Ex-smoker % (other measure)',
+    'Fruit & Vegetables (5+ portions per day)',
+    'Fruit & vegetable consumption (guidelines) - Less than 5 portions',
+    'Fruit & vegetable consumption (guidelines) - None',
+    'Heart Failure (count)',
+    'Myocardial infarction (count)',
+    'Never smoked %',
+    'Never smoked % (other measure)',
+    'Obese adults %',
+    'Other cardiovascular disease (count)',
+    'Stroke (count)'
+]
+# Keep only the specified columns
+df_geography_2_copy = df_geography_2_copy[columns_to_keep]
+
+# Choices for England & separate imputation
+# Filter the DataFrame for rows with 'Geography' value '1'
+df_geography_1 = dfCleaningReshaped.query('Geography == 1')
+# Create a copy of the filtered DataFrame
+df_geography_1_copy = df_geography_1.copy()
+# List of columns to keep
+columns_to_keep_geography_1 = [
+    'Year',
+    'Sex',
+    'Geography',
+    'Age - Median age (years)',
+    'Age - Median age of death (years)',
+    'Alcohol - % Proportion who drank alcohol in the last week',
+    'All Heart & Circulatory diseases (count)',
+    'Atrial Fib - % of Atrial Fibrillation',
+    'Atrial fibrillation (count)',
+    'Coronary Heart Disease (count)',
+    'Current smoker %',
+    'Ex-smoker %',
+    'Fruit & Vegetables (5+ portions per day)',
+    'Fruit & Vegetables - Average No. of portions per day',
+    'Heart Failure (count)',
+    'Myocardial infarction (count)',
+    'Never smoked %',
+    'Obesity - Mean BMI',
+    'Other cardiovascular disease (count)',
+    'Stroke (count)',
+    'With Diabetes (type 1) %',
+    'With Diabetes (type 2) %'
+]
+
+# Keep only the specified columns
+df_geography_1_copy = df_geography_1_copy[columns_to_keep_geography_1]
+
+# Impute
+# England
+# Create a copy of the df_geography_1_copy DataFrame
+df_geography_1_copy_imputed_sex = df_geography_1_copy.copy()
+
+# Group the DataFrame by 'Sex'
+grouped_by_sex = df_geography_1_copy_imputed_sex.groupby('Sex')
+
+# Apply the mean imputation separately for each group using the transform() function, excluding 'Year' and 'Geography' columns
+cols_to_impute = df_geography_1_copy_imputed_sex.columns.difference(['Year', 'Sex', 'Geography'])
+df_geography_1_copy_imputed_sex[cols_to_impute] = grouped_by_sex[cols_to_impute].transform(lambda x: x.fillna(x.mean()))
+
+# If there are still missing values, apply the overall mean imputation
+df_geography_1_copy_imputed_sex[cols_to_impute] = df_geography_1_copy_imputed_sex[cols_to_impute].apply(lambda x: x.fillna(x.mean()), axis=0)
+# Export the DataFrame to a CSV file
+file_path_geography_1_imputed_sex = "/Users/KarenMarter/Desktop/df_geography_1_copy_imputed_sex.csv"
+df_geography_1_copy_imputed_sex.to_csv(file_path_geography_1_imputed_sex, index=False)
+
+print(f"Imputed DataFrame 'df_geography_1_copy_imputed_sex' has been saved to {file_path_geography_1_imputed_sex}")
+print("No. of variables in England dataframe before dropping CVD related variables")
+print(df_geography_1_copy_imputed_sex.shape)
+
+# Drop CVD-related columns in df_geography_1_copy_imputed_sex
+columns_to_drop = [
+    "Atrial Fib - % of Atrial Fibrillation",
+    "Atrial fibrillation (count)",
+    "Coronary Heart Disease (count)",
+    "Heart Failure (count)",
+    "Myocardial infarction (count)"
+]
+
+df_geography_1_copy_imputed_sex = df_geography_1_copy_imputed_sex.drop(columns=columns_to_drop)
+print("No. of variables in England dataframe after dropping CVD related variables")
+print(df_geography_1_copy_imputed_sex.shape)
+
+# Impute
+# Scotland
+# Create a copy of the df_geography_2_copy DataFrame
+df_geography_2_copy_imputed_sex = df_geography_2_copy.copy()
+
+# Group the DataFrame by 'Sex'
+grouped_by_sex = df_geography_2_copy_imputed_sex.groupby('Sex')
+
+# Apply the mean imputation separately for each group using the transform() function, excluding 'Year' and 'Geography' columns
+cols_to_impute = df_geography_2_copy_imputed_sex.columns.difference(['Year', 'Sex', 'Geography'])
+df_geography_2_copy_imputed_sex[cols_to_impute] = grouped_by_sex[cols_to_impute].transform(lambda x: x.fillna(x.mean()))
+
+# If there are still missing values, apply the overall mean imputation
+df_geography_2_copy_imputed_sex[cols_to_impute] = df_geography_2_copy_imputed_sex[cols_to_impute].apply(lambda x: x.fillna(x.mean()), axis=0)
+# Define the file path where you want to save the CSV file (change the path according to your system)
+file_path_geography_2_imputed_sex = "/Users/KarenMarter/Desktop/df_geography_2_copy_imputed_sex.csv"
+
+# Export the DataFrame to a CSV file
+df_geography_2_copy_imputed_sex.to_csv(file_path_geography_2_imputed_sex, index=False)
+
+print(f"Imputed DataFrame 'df_geography_2_copy_imputed_sex' has been saved to {file_path_geography_2_imputed_sex}")
+print("No. of variables in Scotland dataframe before dropping CVD related variables")
+print(df_geography_2_copy_imputed_sex.shape)
+
+# Drop CVD-related columns in df_geography_2_copy_imputed_sex
+columns_to_drop = [
+    "Atrial Fib - Diagnosed Atrial Fibrillation",
+    "Atrial fibrillation (count)",
+    "Coronary Heart Disease (count)",
+    "Heart Failure (count)",
+    "Myocardial infarction (count)"
+]
+
+df_geography_2_copy_imputed_sex = df_geography_2_copy_imputed_sex.drop(columns=columns_to_drop)
+print("No. of variables in Scotland dataframe after dropping CVD related variables")
+print(df_geography_2_copy_imputed_sex.shape)
+
+# Feature Selection - Filter Method
+
+import pandas as pd
+
+def select_features_by_correlation(df, target_var, threshold=0.5):
+    # Calculate the correlation matrix
+    corr_matrix = df.corr()
+
+    # Select features with a correlation above the threshold
+    selected_features = [col for col in corr_matrix.columns
+                         if abs(corr_matrix.loc[col, target_var]) > threshold and col != target_var]
+
+    return df[selected_features]
+
+
+target_var = "All Heart & Circulatory diseases (count)"
+
+# Perform feature selection for both dataframes
+selected_df_geography_1 = select_features_by_correlation(df_geography_1_copy_imputed_sex, target_var)
+selected_df_geography_2 = select_features_by_correlation(df_geography_2_copy_imputed_sex, target_var)
+
+print("Selected features for Geography 1:")
+print(selected_df_geography_1.columns)
+
+print("Selected features for Geography 2:")
+print(selected_df_geography_2.columns)
+
+# Feature Selection - Wrapper Method
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from xgboost import XGBRegressor
+from sklearn.model_selection import cross_validate
+from sklearn.feature_selection import RFECV
+
+# Define the target variable
+target_var = "All Heart & Circulatory diseases (count)"
+
+# Define the list of models
+models = [("Linear Regression", LinearRegression()),
+          ("Ridge Regression", Ridge(alpha=0.5)),
+          ("Lasso Regression", Lasso(alpha=0.1)),
+          ("ElasticNet Regression", ElasticNet(alpha=0.1, l1_ratio=0.5, max_iter=10000)),
+         # ("KNN", KNeighborsRegressor(n_neighbors=5)),
+          ("Random Forest", RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)),
+          ("Gradient Boosting", GradientBoostingRegressor(n_estimators=100, max_depth=10, random_state=42)),
+          ("XGBoost", XGBRegressor(n_estimators=100, max_depth=10, random_state=42))]
+
+# Dataframes for both geographies
+dfs = [("Geography 1", df_geography_1_copy_imputed_sex),
+       ("Geography 2", df_geography_2_copy_imputed_sex)]
+
+for geo_name, df in dfs:
+    # Define the features and target variables
+    X = df.drop(columns=target_var).values
+    y = df[target_var].values
+
+    for model_name, model_instance in models:
+        # Initialize the RFECV object with the model instance
+        rfecv = RFECV(estimator=model_instance, step=1, cv=10, scoring='neg_mean_squared_error')
+
+        # Fit the RFECV object to the data
+        rfecv.fit(X, y)
+
+        # Print the optimal number of features
+        print(f"{geo_name} - {model_name}: Optimal number of features: {rfecv.n_features_}")
+
+        # Get the feature importances
+        feature_ranks = rfecv.ranking_
+        feature_names = df.drop(columns=target_var).columns
+
+        # Print the feature ranking
+        print(f"{geo_name} - {model_name}: Feature Ranking:")
+        for i, feature in enumerate(feature_names):
+            print(f"{feature}: {feature_ranks[i]}")
+        print("\n")
+
+from sklearn.model_selection import GridSearchCV
+from sklearn.neural_network import MLPRegressor
+
+# define X_train for df_geography_1_copy_imputed_sex
+X_train1 = df_geography_1_copy_imputed_sex.iloc[:, :-1]
+
+# define y_train for df_geography_1_copy_imputed_sex
+y_train1 = df_geography_1_copy_imputed_sex['Stroke (count)']
+
+# define X_train for df_geography_2_copy_imputed_sex
+X_train2 = df_geography_2_copy_imputed_sex.iloc[:, :-1]
+
+# define y_train for df_geography_2_copy_imputed_sex
+y_train2 = df_geography_2_copy_imputed_sex['Stroke (count)']
+
+# define a dictionary of hyperparameters and their possible values for the MLP model
+param_grid = {
+    'hidden_layer_sizes': [(10,), (50,), (100,)],
+    'activation': ['relu', 'tanh'],
+    'solver': ['sgd', 'adam'],
+    'alpha': [0.0001, 0.001, 0.01],
+    'learning_rate': ['constant', 'adaptive'],
+}
+
+# create an instance of the MLPRegressor class with max_iter=500
+mlp = MLPRegressor(max_iter=500)
+
+# create an instance of the GridSearchCV class with the MLPRegressor instance, the hyperparameter dictionary, and cv=10
+grid_search1 = GridSearchCV(mlp, param_grid, cv=10)
+grid_search2 = GridSearchCV(mlp, param_grid, cv=10)
+
+# fit the GridSearchCV object to the training data
+grid_search1.fit(X_train1, y_train1)
+grid_search2.fit(X_train2, y_train2)
+
+# print the best hyperparameters and corresponding score
+print("Best hyperparameters for df_geography_1_copy_imputed_sex: ", grid_search1.best_params_)
+print("Best score for df_geography_1_copy_imputed_sex: ", -grid_search1.best_score_)
+print("Best hyperparameters for df_geography_2_copy_imputed_sex: ", grid_search2.best_params_)
+print("Best score for df_geography_2_copy_imputed_sex: ", -grid_search2.best_score_)
+
+# create a new instance of the MLPRegressor class with the best hyperparameters obtained from the grid search, and train the model on the entire training set
+best_params1 = grid_search1.best_params_
+mlp1 = MLPRegressor(**best_params1, max_iter=500)
+mlp1.fit(X_train1, y_train1)
+
+best_params2 = grid_search2.best_params_
+mlp2 = MLPRegressor(**best_params2, max_iter=500)
+mlp2.fit(X_train2, y_train2)
+
+# Neural Networks
+# Perform grid search
+from sklearn.model_selection import GridSearchCV
+
+# define the parameter grid
+param_grid = {
+    'hidden_layer_sizes': [(50,), (100,), (50,50), (100,50)],
+    'activation': ['relu', 'tanh'],
+    'solver': ['adam', 'sgd'],
+    'max_iter': [500, 1000, 2000]
+}
+
+# define the neural network model
+nn = MLPRegressor(random_state=42)
+
+# define the grid search object
+grid_search = GridSearchCV(nn, param_grid=param_grid, cv=10, refit='neg_mean_absolute_error',
+                           scoring={'neg_mean_absolute_error': 'neg_mean_absolute_error',
+                                    'neg_mean_squared_error': 'neg_mean_squared_error',
+                                    'r2': 'r2'})
+
+# perform grid search for Geography 1
+print("Geography 1 - Neural Network")
+# define the features and target variables for geography 1
+X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
+y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
+# perform grid search
+grid_search.fit(X_geo1, y_geo1)
+# print the best hyperparameters and performance metrics
+print("Best hyperparameters: ", grid_search.best_params_)
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
+print("------------------------")
+
+# perform grid search for Geography 2
+print("Geography 2 - Neural Network")
+# define the features and target variables for geography 2
+X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
+y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
+# perform grid search
+grid_search.fit(X_geo2, y_geo2)
+# print the best hyperparameters and performance metrics
+print("Best hyperparameters: ", grid_search.best_params_)
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
+print("------------------------")
+
+# SVM
+# Perform grid search
+from sklearn.model_selection import GridSearchCV
+
+# Define the parameter grid
+param_grid = {
+    'kernel': ['linear', 'rbf', 'poly'],
+    'C': [0.1, 1, 10],
+    'gamma': ['scale', 'auto'],
+}
+
+# Define the SVM model
+svm = SVR()
+
+grid_search = GridSearchCV(svm, param_grid=param_grid, cv=10,
+                           scoring={'neg_mean_absolute_error': make_scorer(mean_absolute_error),
+                                    'neg_mean_squared_error': make_scorer(mean_squared_error),
+                                    'r2': make_scorer(r2_score)},
+                           refit='neg_mean_absolute_error', return_train_score=True)
+
+# Perform grid search for Geography 1
+print("Geography 1 - SVM")
+# Define the features and target variables for geography 1
+X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
+y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
+# Perform grid search
+grid_search.fit(X_geo1, y_geo1)
+# Print the best hyperparameters and performance metrics
+print("Best hyperparameters: ", grid_search.best_params_)
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
+print("------------------------")
+
+# Perform grid search for Geography 2
+print("Geography 2 - SVM")
+# Define the features and target variables for geography 2
+X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
+y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
+# Perform grid search
+grid_search.fit(X_geo2, y_geo2)
+# Print the best hyperparameters and performance metrics
+print("Best hyperparameters: ", grid_search.best_params_)
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
+print("------------------------")
+
+# KNN
+# Perform grid search
+from sklearn.model_selection import GridSearchCV
+
+# Define the parameter grid
+param_grid = {
+    'n_neighbors': [3, 5, 7, 9],
+    'weights': ['uniform', 'distance'],
+    'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
+    'p': [1, 2],
+}
+
+# Define the KNN model
+knn = KNeighborsRegressor()
+
+# Define the grid search object
+grid_search = GridSearchCV(knn, param_grid=param_grid, cv=10,
+                           scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'), refit='neg_mean_absolute_error')
+
+# Perform grid search for Geography 1
+print("Geography 1 - KNN")
+# Define the features and target variables for geography 1
+X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
+y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
+# Perform grid search
+grid_search.fit(X_geo1, y_geo1)
+# Print the best hyperparameters and performance metrics
+print("Best hyperparameters: ", grid_search.best_params_)
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
+print("------------------------")
+
+# Perform grid search for Geography 2
+print("Geography 2 - KNN")
+# Define the features and target variables for geography 2
+X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
+y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
+# Perform grid search
+grid_search.fit(X_geo2, y_geo2)
+# Print the best hyperparameters and performance metrics
+print("Best hyperparameters: ", grid_search.best_params_)
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
+print("------------------------")
+
+# Random Forest
+# Perform grid search
+from sklearn.model_selection import GridSearchCV
+
+# Define the parameter grid
+param_grid = {
+    'n_estimators': [50, 100, 200],
+    'max_depth': [5, 10, 15, 20, None],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 4],
+    'max_features': ['auto', 'sqrt', 'log2', None],
+}
+
+# Define the Random Forest model
+rf = RandomForestRegressor(random_state=42)
+
+# Define the grid search object
+grid_search = GridSearchCV(rf, param_grid=param_grid, cv=10,
+                           scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'), refit='neg_mean_squared_error')
+
+# Perform grid search for Geography 1
+print("Geography 1 - Random Forest")
+# Define the features and target variables for geography 1
+X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
+y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
+# Perform grid search
+grid_search.fit(X_geo1, y_geo1)
+# Print the best hyperparameters and performance metrics
+print("Best hyperparameters: ", grid_search.best_params_)
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
+print("------------------------")
+
+# Perform grid search for Geography 2
+print("Geography 2 - Random Forest")
+# Define the features and target variables for geography 2
+X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
+y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
+# Perform grid search
+grid_search.fit(X_geo2, y_geo2)
+# Print the best hyperparameters and performance metrics
+print("Best hyperparameters: ", grid_search.best_params_)
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
+print("------------------------")
+
+# Gradient Boosting
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, make_scorer
+import numpy as np
+
+# Define the target variable
+target_var = "All Heart & Circulatory diseases (count)"
+
+# Define the Gradient Boosting model
+gb = GradientBoostingRegressor(random_state=42)
+
+# Define the hyperparameter grid for grid search
+param_grid = {
+    'n_estimators': [100, 500, 1000],
+    'max_depth': [3, 5, 7, 10],
+    'learning_rate': [0.01, 0.1, 1]
+}
+
+# Perform grid search with 10-fold cross-validation for Geography 1
+print("Geography 1 - Gradient Boosting")
+# Define the features and target variables for geography 1
+X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
+y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
+# Perform grid search with cross-validation
+grid_search_geo1 = GridSearchCV(gb, param_grid=param_grid, cv=10, refit='neg_mean_absolute_error', scoring='neg_mean_squared_error')
+grid_search_geo1.fit(X_geo1, y_geo1)
+# Print the best hyperparameters and performance metrics
+print("Best hyperparameters:", grid_search_geo1.best_params_)
+print("Best score:", -grid_search_geo1.best_score_)
+print("MAE:", np.mean(-grid_search_geo1.cv_results_['mean_test_score']))
+print("MSE:", np.mean(-grid_search_geo1.cv_results_['mean_test_score']))
+print("R2:", np.mean(grid_search_geo1.cv_results_['mean_test_score']))
+print("------------------------")
+
+# Perform grid search with 10-fold cross-validation for Geography 2
+print("Geography 2 - Gradient Boosting")
+# Define the features and target variables for geography 2
+X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
+y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
+# Perform grid search with cross-validation
+grid_search_geo2 = GridSearchCV(gb, param_grid=param_grid, cv=10, refit='neg_mean_absolute_error', scoring='neg_mean_squared_error')
+grid_search_geo2.fit(X_geo2, y_geo2)
+# Print the best hyperparameters and performance metrics
+print("Best hyperparameters:", grid_search_geo2.best_params_)
+print("Best score:", -grid_search_geo2.best_score_)
+print("MAE:", np.mean(-grid_search_geo2.cv_results_['mean_test_score']))
+print("MSE:", np.mean(-grid_search_geo2.cv_results_['mean_test_score']))
+print("R2:", np.mean(grid_search_geo2.cv_results_['mean_test_score']))
+print("------------------------")
+
+# XGBoost
+from xgboost import XGBRegressor
+from sklearn.model_selection import GridSearchCV
+import numpy as np
+
+# Define the target variable
+target_var = "All Heart & Circulatory diseases (count)"
+
+# Define the features and target variables for geography 1
+X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
+y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
+
+# Define the XGBoost model
+xgb = XGBRegressor(random_state=42)
+
+# Define the parameter grid to search
+param_grid = {
+    'n_estimators': [50, 100, 150],
+    'max_depth': [5, 10, 15],
+    'learning_rate': [0.1, 0.01, 0.001]
+}
+
+# Define the grid search object
+grid_search = GridSearchCV(estimator=xgb, param_grid=param_grid, cv=10, refit='neg_mean_absolute_error',
+                           scoring={'neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'}, refit_metric='neg_mean_absolute_error')
+
+# Fit the grid search object to the data for geography 1
+grid_search.fit(X_geo1, y_geo1)
+
+# Print the best hyperparameters and performance metrics for geography 1
+print("Geography 1 - XGBoost")
+print("Best hyperparameters: ", grid_search.best_params_)
+print("MAE: ", np.mean(-grid_search.cv_results_['mean_test_neg_mean_absolute_error'][grid_search.best_index_]))
+print("MSE: ", np.mean(-grid_search.cv_results_['mean_test_neg_mean_squared_error'][grid_search.best_index_]))
+print("R2: ", np.mean(grid_search.cv_results_['mean_test_r2'][grid_search.best_index_]))
+print("------------------------")
+
+# Define the features and target variables for geography 2
+X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
+y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
+
+# Fit the grid search object to the data for geography 2
+grid_search.fit(X_geo2, y_geo2)
+
+# Print the best hyperparameters and performance metrics for geography 2
+print("Geography 2 - XGBoost")
+print("Best hyperparameters: ", grid_search.best_params_)
+print("MAE: ", np.mean(-grid_search.cv_results_['mean_test_neg_mean_absolute_error'][grid_search.best_index_]))
+print("MSE: ", np.mean(-grid_search.cv_results_['mean_test_neg_mean_squared_error'][grid_search.best_index_]))
+print("R2: ", np.mean(grid_search.cv_results_['mean_test_r2'][grid_search.best_index_]))
+print("------------------------")
+
+# Compare performance across all models
+# Define the target variable
+# Define the target variable
+target_var = "All Heart & Circulatory diseases (count)"
+
+# Define the list of models
+models = [("Linear Regression", LinearRegression()),
+          ("Ridge Regression", Ridge(alpha=0.5)),
+          ("Lasso Regression", Lasso(alpha=0.1)),
+          ("ElasticNet Regression", ElasticNet(alpha=0.1, l1_ratio=0.5, max_iter=10000)),
+          ("KNN", KNeighborsRegressor(n_neighbors=5)),
+          ("Random Forest", RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)),
+          ("Gradient Boosting", GradientBoostingRegressor(n_estimators=100, max_depth=10, random_state=42)),
+          ("XGBoost", XGBRegressor(n_estimators=100, max_depth=10, random_state=42))]
+
+# Evaluate Models with Grid Search
+import os
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from xgboost import XGBRegressor
+from sklearn.model_selection import cross_validate, GridSearchCV
+
+# Define the target variable
+target_var = "All Heart & Circulatory diseases (count)"
+
+# Define hyperparameter grids
+ridge_param_grid = {'alpha': [0.1, 0.5, 1, 5, 10]}
+
+# Import GridSearchCV
+from sklearn.model_selection import GridSearchCV
+
+# Define the list of models
+models = [("Linear Regression", LinearRegression()),
+          ("Ridge Regression", GridSearchCV(Ridge(), ridge_param_grid, scoring='neg_mean_absolute_error', cv=10)),
+          ("Lasso Regression", Lasso(alpha=0.1)),
+          ("ElasticNet Regression", ElasticNet(alpha=0.1, l1_ratio=0.5, max_iter=10000)),
+          ("KNN", KNeighborsRegressor(n_neighbors=5)),
+          ("Random Forest", RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)),
+          ("Gradient Boosting", GradientBoostingRegressor(n_estimators=100, max_depth=10, random_state=42)),
+          ("XGBoost", XGBRegressor(n_estimators=100, max_depth=10, random_state=42))]
+
+# Evaluate the models
+results = []
+for model in models:
+    # Define the features and target variables for geography 1
+    X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
+    y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
+    # Perform 10-fold cross-validation for geography 1
+    cv_results_geo1 = cross_validate(model[1], X_geo1, y_geo1, cv=10,
+                                     scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'))
+    # Calculate mean performance metrics for geography 1
+    mae_geo1 = np.mean(-cv_results_geo1)
+    mse_geo1 = np.mean(-cv_results_geo1)
+    r2_geo1 = np.mean(cv_results_geo1)
+
+    # Calculate feature importances for tree-based models
+    if model[0] in ["Random Forest", "Gradient Boosting", "XGBoost"]:
+        model[1].fit(X_geo1, y_geo1)
+        feature_importance_geo1 = model[1].feature_importances_
+        feature_importance_dict_geo1 = {col: imp for col, imp in zip(df_geography_1_copy_imputed_sex.columns[:-1], feature_importance_geo1)}
+    else:
+        feature_importance_dict_geo1 = None
+
+    # Define the features and target variables for geography 2
+    X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
+    y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
+
+    # Perform 10-fold cross-validation for geography 2
+    cv_results_geo2 = cross_validate(model[1], X_geo2, y_geo2, cv=10,
+                                     scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'))
+    # Calculate mean performance metrics for geography 2
+    mae_geo2 = np.mean(-cv_results_geo2)
+    mse_geo2 = np.mean(-cv_results_geo2)
+    r2_geo2 = np.mean(cv_results_geo2)
+
+    # Calculate feature importances for tree-based models
+    if model[0] in ["Random Forest", "Gradient Boosting", "XGBoost"]:
+        model[1].fit(X_geo2, y_geo2)
+        feature_importance_geo2 = model[1].feature_importances_
+        feature_importance_dict_geo2 = {col: imp for col, imp in
+                                        zip(df_geography_2_copy_imputed_sex.columns[:-1], feature_importance_geo2)}
+    else:
+        feature_importance_dict_geo2 = None
+
+    # Append the results for both geographies to the results list
+    results.append({'Model': model[0], 'Geography': 1, 'MAE': mae_geo1, 'MSE': mse_geo1, 'R2': r2_geo1,
+                    'Feature Importance': feature_importance_dict_geo1})
+    results.append({'Model': model[0], 'Geography': 2, 'MAE': mae_geo2, 'MSE': mse_geo2, 'R2': r2_geo2,
+                    'Feature Importance': feature_importance_dict_geo2})
+
+    # Create a dataframe to display the results
+    results_comparison_df = pd.DataFrame(results)
+    print(results_comparison_df)
+
+    # Set the file path to the desktop directory
+    comparison_file_path = os.path.join('/Users', 'KarenMarter', 'Desktop', 'comparison_results.csv')
+
+    # Output results to a CSV file on the desktop
+    results_comparison_df.to_csv(comparison_file_path, index=False)
+
+    # Print confirmation message
+    print('Results saved to', comparison_file_path)
+
+
+# Visuals
+import os
+import matplotlib.pyplot as plt
+
+# Define the target variable
+target_var = "All Heart & Circulatory diseases (count)"
+
+# Define the list of models
+models = [("Linear Regression", LinearRegression()),
+          ("Ridge Regression", Ridge(alpha=0.5)),
+          ("Lasso Regression", Lasso(alpha=0.1)),
+          ("ElasticNet Regression", ElasticNet(alpha=0.1, l1_ratio=0.5, max_iter=10000)),
+          ("KNN", KNeighborsRegressor(n_neighbors=5)),
+          ("Random Forest", RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)),
+          ("Gradient Boosting", GradientBoostingRegressor(n_estimators=100, max_depth=10, random_state=42)),
+          ("XGBoost", XGBRegressor(n_estimators=100, max_depth=10, random_state=42))]
+
+# Define the directory to save the PNG files
+save_dir = os.path.join(os.path.expanduser("~"), "Desktop")
+
+# Evaluate the models
+for model in models:
+    # Define the features and target variables for geography 1
+    X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
+    y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
+    # Fit the model on geography 1
+    model[1].fit(X_geo1, y_geo1)
+    # Make predictions on geography 1
+    y_pred_geo1 = model[1].predict(X_geo1)
+    # Create a scatterplot of actual vs. predicted values for geography 1
+    fig, ax = plt.subplots()
+    ax.scatter(y_geo1, y_pred_geo1)
+    ax.set_xlabel("Actual")
+    ax.set_ylabel("Predicted")
+    ax.set_title(model[0] + " - Geography 1")
+    # Save the scatterplot as a PNG file
+    plt.savefig(os.path.join(save_dir, model[0] + "_geo1.png"))
+    plt.close()
+
+    # Define the features and target variables for geography 2
+    X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
+    y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
+    # Fit the model on geography 2
+    model[1].fit(X_geo2, y_geo2)
+    # Make predictions on geography 2
+    y_pred_geo2 = model[1].predict(X_geo2)
+    # Create a scatterplot of actual vs. predicted values for geography 2
+    fig, ax = plt.subplots()
+    ax.scatter(y_geo2, y_pred_geo2)
+    ax.set_xlabel("Actual")
+    ax.set_ylabel("Predicted")
+    ax.set_title(model[0] + " - Geography 2")
+    # Save the scatterplot as a PNG file
+    plt.savefig(os.path.join(save_dir, model[0] + "_geo2.png"))
+    plt.close()
+
+# Heatmaps
+    import numpy as np
+    import pandas as pd
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
+    from sklearn.neighbors import KNeighborsRegressor
+    from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+    from xgboost import XGBRegressor
+    from sklearn.model_selection import cross_validate
+
+    # Define the target variable
+    target_var = "All Heart & Circulatory diseases (count)"
+
+    # Define the list of models
+    models = [("Linear Regression", LinearRegression()),
+              ("Ridge Regression", Ridge(alpha=0.5)),
+              ("Lasso Regression", Lasso(alpha=0.1)),
+              ("ElasticNet Regression", ElasticNet(alpha=0.1, l1_ratio=0.5, max_iter=10000)),
+              ("KNN", KNeighborsRegressor(n_neighbors=5)),
+              ("Random Forest", RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)),
+              ("Gradient Boosting", GradientBoostingRegressor(n_estimators=100, max_depth=10, random_state=42)),
+              ("XGBoost", XGBRegressor(n_estimators=100, max_depth=10, random_state=42))]
+
+
+    # Create a function to plot a heatmap
+    def plot_heatmap(df, title, output_file):
+        plt.figure(figsize=(10, 8))
+        plt.title(title)
+        sns.heatmap(df, annot=True, cmap='coolwarm')
+        plt.savefig(f'/Users/KarenMarter/Desktop/{output_file}.png')
+
+
+    # Evaluate the models
+    results = []
+    for model in models:
+        # Define the features and target variables for geography 1
+        X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
+        y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
+        # Perform 10-fold cross-validation for geography 1
+        cv_results_geo1 = cross_validate(model[1], X_geo1, y_geo1, cv=10,
+                                         scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'))
+        # Calculate mean performance metrics for geography 1
+        mae_geo1 = np.mean(-cv_results_geo1)
+        mse_geo1 = np.mean(-cv_results_geo1)
+        r2_geo1 = np.mean(cv_results_geo1)
+
+        # Define the features and target variables for geography 2
+        X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
+        y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
+        # Perform 10-fold cross-validation for geography 2
+        cv_results_geo2 = cross_validate(model[1], X_geo2, y_geo2, cv=10,
+                                         scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'))
+        # Calculate mean performance metrics for geography 2
+        mae_geo2 = np.mean(-cv_results_geo2)
+        mse_geo2 = np.mean(-cv_results_geo2)
+        r2_geo2 = np.mean(cv_results_geo2)
+
+        # Append the results for both geographies to the results list
+        results.append({'Model': model[0], 'Geography': 1, 'MAE': mae_geo1, 'MSE': mse_geo1, 'R2': r2_geo1})
+        results.append({'Model': model[0], 'Geography': 2, 'MAE': mae_geo2, 'MSE': mse_geo2, 'R2': r2_geo2})
+
+    # Create a dataframe to display the results
+    results_df = pd.DataFrame(results)
+    print(results_df)
+
+    # Pivot the results dataframe for heatmap visualization
+    heatmap_df = results_df.pivot_table(index=['Model'], columns=['Geography'], values=['MAE', 'MSE', 'R2'])
+
+    # Plot heatmaps for each performance metric
+    plot_heatmap(heatmap_df['MAE'], 'Mean Absolute Error', 'heatmap_MAE')
+    plot_heatmap(heatmap_df['MSE'], 'Mean Squared Error', 'heatmap_MSE')
+    plot_heatmap(heatmap_df['R2'], 'R-squared', 'heatmap_R2')
+
+# Residual Plots & Feature Importance
+    import numpy as np
+    import pandas as pd
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
+    from sklearn.neighbors import KNeighborsRegressor
+    from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+    from xgboost import XGBRegressor
+    from sklearn.model_selection import cross_validate
+
+# Geography 1
+    # Define the target variable
+    target_var = "All Heart & Circulatory diseases (count)"
+
+    # Define the list of models
+    models = [("Linear Regression", LinearRegression()),
+              ("Ridge Regression", Ridge(alpha=0.5)),
+              ("Lasso Regression", Lasso(alpha=0.1)),
+              ("ElasticNet Regression", ElasticNet(alpha=0.1, l1_ratio=0.5, max_iter=10000)),
+              ("KNN", KNeighborsRegressor(n_neighbors=5)),
+              ("Random Forest", RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)),
+              ("Gradient Boosting", GradientBoostingRegressor(n_estimators=100, max_depth=10, random_state=42)),
+              ("XGBoost", XGBRegressor(n_estimators=100, max_depth=10, random_state=42))]
+
+
+    # Function to save plots to desktop
+    def save_plot_to_desktop(fig, filename):
+        filepath = f'/Users/KarenMarter/Desktop/{filename}.png'
+        fig.savefig(filepath)
+
+
+    # Residual plots for all models
+    for model in models:
+        model_name, model_instance = model
+        model_instance.fit(X_geo1, y_geo1)
+        y_pred_geo1 = model_instance.predict(X_geo1)
+        residuals = y_geo1 - y_pred_geo1
+
+        fig, ax = plt.subplots()
+        ax.scatter(y_pred_geo1, residuals, alpha=0.5)
+        ax.axhline(y=0, color='r', linestyle='--')
+        ax.set_xlabel("Predicted Values")
+        ax.set_ylabel("Residuals")
+        ax.set_title(f"Residual Plot for {model_name} (Geography 1)")
+
+        save_plot_to_desktop(fig, f"residual_plot_{model_name.replace(' ', '_')}_geo1")
+
+    # Feature importance plots for tree-based models
+    tree_based_models = [
+        ("Random Forest", RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)),
+        ("Gradient Boosting", GradientBoostingRegressor(n_estimators=100, max_depth=10, random_state=42)),
+        ("XGBoost", XGBRegressor(n_estimators=100, max_depth=10, random_state=42))
+    ]
+
+    feature_names = df_geography_1_copy_imputed_sex.drop(columns=target_var).columns
+
+    for model in tree_based_models:
+        model_name, model_instance = model
+        model_instance.fit(X_geo1, y_geo1)
+
+        if model_name == "XGBoost":
+            importances = model_instance.feature_importances_
+        else:
+            importances = model_instance.feature_importances_
+
+        sorted_idx = importances.argsort()
+
+        fig, ax = plt.subplots()
+        ax.barh(range(X_geo1.shape[1]), importances[sorted_idx])
+        ax.set_yticks(range(X_geo1.shape[1]))
+        ax.set_yticklabels(feature_names[sorted_idx])
+        ax.set_xlabel("Feature Importance")
+        ax.set_title(f"Feature Importance Plot for {model_name} (Geography 1)")
+
+        save_plot_to_desktop(fig, f"feature_importance_{model_name.replace(' ', '_')}_geo1")
+
+# Geography 2
+
+        # Define the target variable
+        target_var = "All Heart & Circulatory diseases (count)"
+
+        # Define the list of models
+        models = [("Linear Regression", LinearRegression()),
+                  ("Ridge Regression", Ridge(alpha=0.5)),
+                  ("Lasso Regression", Lasso(alpha=0.1)),
+                  ("ElasticNet Regression", ElasticNet(alpha=0.1, l1_ratio=0.5, max_iter=10000)),
+                  ("KNN", KNeighborsRegressor(n_neighbors=5)),
+                  ("Random Forest", RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)),
+                  ("Gradient Boosting", GradientBoostingRegressor(n_estimators=100, max_depth=10, random_state=42)),
+                  ("XGBoost", XGBRegressor(n_estimators=100, max_depth=10, random_state=42))]
+
+
+        # Function to save plots to desktop
+        def save_plot_to_desktop(fig, filename):
+            filepath = f'/Users/KarenMarter/Desktop/{filename}.png'
+            fig.savefig(filepath)
+
+
+        # Residual plots for all models
+        for model in models:
+            model_name, model_instance = model
+            model_instance.fit(X_geo2, y_geo2)
+            y_pred_geo2 = model_instance.predict(X_geo2)
+            residuals = y_geo2 - y_pred_geo2
+
+            fig, ax = plt.subplots()
+            ax.scatter(y_pred_geo2, residuals, alpha=0.5)
+            ax.axhline(y=0, color='r', linestyle='--')
+            ax.set_xlabel("Predicted Values")
+            ax.set_ylabel("Residuals")
+            ax.set_title(f"Residual Plot for {model_name} (Geography 2)")
+
+            save_plot_to_desktop(fig, f"residual_plot_{model_name.replace(' ', '_')}_geo2")
+
+        # Feature importance plots for tree-based models
+        tree_based_models = [
+            ("Random Forest", RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)),
+            ("Gradient Boosting", GradientBoostingRegressor(n_estimators=100, max_depth=10, random_state=42)),
+            ("XGBoost", XGBRegressor(n_estimators=100, max_depth=10, random_state=42))
+        ]
+
+        feature_names = df_geography_2_copy_imputed_sex.drop(columns=target_var).columns
+
+        for model in tree_based_models:
+            model_name, model_instance = model
+            model_instance.fit(X_geo2, y_geo2)
+
+            if model_name == "XGBoost":
+                importances = model_instance.feature_importances_
+            else:
+                importances = model_instance.feature_importances_
+
+            sorted_idx = importances.argsort()
+
+            fig, ax = plt.subplots()
+            ax.barh(range(X_geo2.shape[1]), importances[sorted_idx])
+            ax.set_yticks(range(X_geo2.shape[1]))
+            ax.set_yticklabels(feature_names[sorted_idx])
+            ax.set_xlabel("Feature Importance")
+            ax.set_title(f"Feature Importance Plot for {model_name} (Geography 2)")
+
+save_plot_to_desktop(fig, f"feature_importance_{model_name.replace(' ', '_')}_geo2")
