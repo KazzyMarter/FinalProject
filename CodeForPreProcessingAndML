@@ -385,7 +385,19 @@ for geo_name, df in dfs:
 from sklearn.model_selection import GridSearchCV
 from sklearn.neural_network import MLPRegressor
 
-# define the parameter grid
+# define X_train for df_geography_1_copy_imputed_sex
+X_train1 = df_geography_1_copy_imputed_sex.iloc[:, :-1]
+
+# define y_train for df_geography_1_copy_imputed_sex
+y_train1 = df_geography_1_copy_imputed_sex['stroke']
+
+# define X_train for df_geography_2_copy_imputed_sex
+X_train2 = df_geography_2_copy_imputed_sex.iloc[:, :-1]
+
+# define y_train for df_geography_2_copy_imputed_sex
+y_train2 = df_geography_2_copy_imputed_sex['stroke']
+
+# define a dictionary of hyperparameters and their possible values for the MLP model
 param_grid = {
     'hidden_layer_sizes': [(10,), (50,), (100,)],
     'activation': ['relu', 'tanh'],
@@ -394,18 +406,31 @@ param_grid = {
     'learning_rate': ['constant', 'adaptive'],
 }
 
-# create the MLPRegressor object
+# create an instance of the MLPRegressor class with max_iter=500
 mlp = MLPRegressor(max_iter=500)
 
-# create the GridSearchCV object
-grid_search = GridSearchCV(mlp, param_grid, cv=10, n_jobs=-1, scoring='neg_mean_absolute_error')
+# create an instance of the GridSearchCV class with the MLPRegressor instance, the hyperparameter dictionary, and cv=10
+grid_search1 = GridSearchCV(mlp, param_grid, cv=10)
+grid_search2 = GridSearchCV(mlp, param_grid, cv=10)
 
 # fit the GridSearchCV object to the training data
-grid_search.fit(X_train, y_train)
+grid_search1.fit(X_train1, y_train1)
+grid_search2.fit(X_train2, y_train2)
 
-# print the best hyperparameters and the corresponding score
-print("Best hyperparameters: ", grid_search.best_params_)
-print("Best score: ", -grid_search.best_score_)
+# print the best hyperparameters and corresponding score
+print("Best hyperparameters for df_geography_1_copy_imputed_sex: ", grid_search1.best_params_)
+print("Best score for df_geography_1_copy_imputed_sex: ", -grid_search1.best_score_)
+print("Best hyperparameters for df_geography_2_copy_imputed_sex: ", grid_search2.best_params_)
+print("Best score for df_geography_2_copy_imputed_sex: ", -grid_search2.best_score_)
+
+# create a new instance of the MLPRegressor class with the best hyperparameters obtained from the grid search, and train the model on the entire training set
+best_params1 = grid_search1.best_params_
+mlp1 = MLPRegressor(**best_params1, max_iter=500)
+mlp1.fit(X_train1, y_train1)
+
+best_params2 = grid_search2.best_params_
+mlp2 = MLPRegressor(**best_params2, max_iter=500)
+mlp2.fit(X_train2, y_train2)
 
 # Neural Networks
 # Perform grid search
