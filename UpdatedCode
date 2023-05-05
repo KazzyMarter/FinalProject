@@ -484,203 +484,153 @@ print("R2: ", grid_search.best_score_)
 print("------------------------")
 
 # SVM
-# Perform grid search
-from sklearn.model_selection import GridSearchCV
+from sklearn.svm import SVR
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import numpy as np
 
-# Define the parameter grid
-param_grid = {
-    'kernel': ['linear', 'rbf', 'poly'],
-    'C': [0.1, 1, 10],
-    'gamma': ['scale', 'auto'],
-}
+# Define the target variable
+target_var = "All Heart & Circulatory diseases (count)"
 
-# Define the SVM model
-svm = SVR()
-
-grid_search = GridSearchCV(svm, param_grid=param_grid, cv=10,
-                           scoring={'neg_mean_absolute_error': make_scorer(mean_absolute_error),
-                                    'neg_mean_squared_error': make_scorer(mean_squared_error),
-                                    'r2': make_scorer(r2_score)},
-                           refit='neg_mean_absolute_error', return_train_score=True)
-
-# Perform grid search for Geography 1
-print("Geography 1 - SVM")
 # Define the features and target variables for geography 1
 X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
 y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
-# Perform grid search
-grid_search.fit(X_geo1, y_geo1)
-# Print the best hyperparameters and performance metrics
-print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", -grid_search.best_score_)
-print("MSE: ", -grid_search.best_score_)
-print("R2: ", grid_search.best_score_)
+
+# Define the SVM model with chosen hyperparameters
+svm = SVR(kernel='rbf', C=1, gamma='scale')
+
+# Fit the model to the data for geography 1
+svm.fit(X_geo1, y_geo1)
+
+# Print the performance metrics for geography 1
+print("Geography 1 - SVM")
+print("MAE: ", mean_absolute_error(y_geo1, svm.predict(X_geo1)))
+print("MSE: ", mean_squared_error(y_geo1, svm.predict(X_geo1)))
+print("R2: ", r2_score(y_geo1, svm.predict(X_geo1)))
 print("------------------------")
 
-# Perform grid search for Geography 2
-print("Geography 2 - SVM")
 # Define the features and target variables for geography 2
 X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
 y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
-# Perform grid search
-grid_search.fit(X_geo2, y_geo2)
-# Print the best hyperparameters and performance metrics
-print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", -grid_search.best_score_)
-print("MSE: ", -grid_search.best_score_)
-print("R2: ", grid_search.best_score_)
+
+# Fit the model to the data for geography 2
+svm.fit(X_geo2, y_geo2)
+
+# Print the performance metrics for geography 2
+print("Geography 2 - SVM")
+print("MAE: ", mean_absolute_error(y_geo2, svm.predict(X_geo2)))
+print("MSE: ", mean_squared_error(y_geo2, svm.predict(X_geo2)))
+print("R2: ", r2_score(y_geo2, svm.predict(X_geo2)))
 print("------------------------")
 
 # KNN
-# Perform grid search
-from sklearn.model_selection import GridSearchCV
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import numpy as np
 
-# Define the parameter grid
-param_grid = {
-    'n_neighbors': [3, 5, 7, 9],
-    'weights': ['uniform', 'distance'],
-    'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
-    'p': [1, 2],
-}
+# Define the target variable
+target_var = "All Heart & Circulatory diseases (count)"
 
 # Define the KNN model
-knn = KNeighborsRegressor()
+knn = KNeighborsRegressor(n_neighbors=5, weights='uniform', algorithm='auto', p=2)
 
-# Define the grid search object
-grid_search = GridSearchCV(knn, param_grid=param_grid, cv=10,
-                           scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'), refit='neg_mean_absolute_error')
-
-# Perform grid search for Geography 1
-print("Geography 1 - KNN")
 # Define the features and target variables for geography 1
 X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
 y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
-# Perform grid search
-grid_search.fit(X_geo1, y_geo1)
-# Print the best hyperparameters and performance metrics
-print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", -grid_search.best_score_)
-print("MSE: ", -grid_search.best_score_)
-print("R2: ", grid_search.best_score_)
+
+# Fit the model to the data for geography 1
+knn.fit(X_geo1, y_geo1)
+
+# Print the performance metrics for geography 1
+print("Geography 1 - KNN")
+print("MAE: ", mean_absolute_error(y_geo1, knn.predict(X_geo1)))
+print("MSE: ", mean_squared_error(y_geo1, knn.predict(X_geo1)))
+print("R2: ", r2_score(y_geo1, knn.predict(X_geo1)))
 print("------------------------")
 
-# Perform grid search for Geography 2
-print("Geography 2 - KNN")
 # Define the features and target variables for geography 2
 X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
 y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
-# Perform grid search
-grid_search.fit(X_geo2, y_geo2)
-# Print the best hyperparameters and performance metrics
-print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", -grid_search.best_score_)
-print("MSE: ", -grid_search.best_score_)
-print("R2: ", grid_search.best_score_)
+
+# Fit the model to the data for geography 2
+knn.fit(X_geo2, y_geo2)
+
+# Print the performance metrics for geography 2
+print("Geography 2 - KNN")
+print("MAE: ", mean_absolute_error(y_geo2, knn.predict(X_geo2)))
+print("MSE: ", mean_squared_error(y_geo2, knn.predict(X_geo2)))
+print("R2: ", r2_score(y_geo2, knn.predict(X_geo2)))
 print("------------------------")
 
 # Random Forest
-# Perform grid search
-from sklearn.model_selection import GridSearchCV
+# Define the Random Forest model with chosen hyperparameters
+rf = RandomForestRegressor(n_estimators=100, max_depth=10, min_samples_split=5,
+                           min_samples_leaf=1, max_features='auto', random_state=42)
 
-# Define the parameter grid
-param_grid = {
-    'n_estimators': [50, 100, 200],
-    'max_depth': [5, 10, 15, 20, None],
-    'min_samples_split': [2, 5, 10],
-    'min_samples_leaf': [1, 2, 4],
-    'max_features': ['auto', 'sqrt', 'log2', None],
-}
-
-# Define the Random Forest model
-rf = RandomForestRegressor(random_state=42)
-
-# Define the grid search object
-grid_search = GridSearchCV(rf, param_grid=param_grid, cv=10,
-                           scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'), refit='neg_mean_squared_error')
-
-# Perform grid search for Geography 1
+# Fit the model to the data for Geography 1
 print("Geography 1 - Random Forest")
 # Define the features and target variables for geography 1
 X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
 y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
-# Perform grid search
-grid_search.fit(X_geo1, y_geo1)
-# Print the best hyperparameters and performance metrics
-print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", -grid_search.best_score_)
-print("MSE: ", -grid_search.best_score_)
-print("R2: ", grid_search.best_score_)
+# Fit the model
+rf.fit(X_geo1, y_geo1)
+# Print the performance metrics
+print("MAE: ", mean_absolute_error(y_geo1, rf.predict(X_geo1)))
+print("MSE: ", mean_squared_error(y_geo1, rf.predict(X_geo1)))
+print("R2: ", r2_score(y_geo1, rf.predict(X_geo1)))
 print("------------------------")
 
-# Perform grid search for Geography 2
+# Fit the model to the data for Geography 2
 print("Geography 2 - Random Forest")
 # Define the features and target variables for geography 2
 X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
 y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
-# Perform grid search
-grid_search.fit(X_geo2, y_geo2)
-# Print the best hyperparameters and performance metrics
-print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", -grid_search.best_score_)
-print("MSE: ", -grid_search.best_score_)
-print("R2: ", grid_search.best_score_)
+# Fit the model
+rf.fit(X_geo2, y_geo2)
+# Print the performance metrics
+print("MAE: ", mean_absolute_error(y_geo2, rf.predict(X_geo2)))
+print("MSE: ", mean_squared_error(y_geo2, rf.predict(X_geo2)))
+print("R2: ", r2_score(y_geo2, rf.predict(X_geo2)))
 print("------------------------")
 
 # Gradient Boosting
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, make_scorer
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import numpy as np
 
 # Define the target variable
 target_var = "All Heart & Circulatory diseases (count)"
 
 # Define the Gradient Boosting model
-gb = GradientBoostingRegressor(random_state=42)
+gb = GradientBoostingRegressor(n_estimators=500, max_depth=3, learning_rate=0.1, random_state=42)
 
-# Define the hyperparameter grid for grid search
-param_grid = {
-    'n_estimators': [100, 500, 1000],
-    'max_depth': [3, 5, 7, 10],
-    'learning_rate': [0.01, 0.1, 1]
-}
-
-# Perform grid search with 10-fold cross-validation for Geography 1
+# Perform model fitting and evaluation for Geography 1
 print("Geography 1 - Gradient Boosting")
 # Define the features and target variables for geography 1
 X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
 y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
-# Perform grid search with cross-validation
-grid_search_geo1 = GridSearchCV(gb, param_grid=param_grid, cv=10, refit='neg_mean_absolute_error', scoring='neg_mean_squared_error')
-grid_search_geo1.fit(X_geo1, y_geo1)
-# Print the best hyperparameters and performance metrics
-print("Best hyperparameters:", grid_search_geo1.best_params_)
-print("Best score:", -grid_search_geo1.best_score_)
-print("MAE:", np.mean(-grid_search_geo1.cv_results_['mean_test_score']))
-print("MSE:", np.mean(-grid_search_geo1.cv_results_['mean_test_score']))
-print("R2:", np.mean(grid_search_geo1.cv_results_['mean_test_score']))
+# Fit the model
+gb.fit(X_geo1, y_geo1)
+# Print the performance metrics
+print("MAE:", mean_absolute_error(y_geo1, gb.predict(X_geo1)))
+print("MSE:", mean_squared_error(y_geo1, gb.predict(X_geo1)))
+print("R2:", r2_score(y_geo1, gb.predict(X_geo1)))
 print("------------------------")
 
-# Perform grid search with 10-fold cross-validation for Geography 2
+# Perform model fitting and evaluation for Geography 2
 print("Geography 2 - Gradient Boosting")
 # Define the features and target variables for geography 2
 X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
 y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
-# Perform grid search with cross-validation
-grid_search_geo2 = GridSearchCV(gb, param_grid=param_grid, cv=10, refit='neg_mean_absolute_error', scoring='neg_mean_squared_error')
-grid_search_geo2.fit(X_geo2, y_geo2)
-# Print the best hyperparameters and performance metrics
-print("Best hyperparameters:", grid_search_geo2.best_params_)
-print("Best score:", -grid_search_geo2.best_score_)
-print("MAE:", np.mean(-grid_search_geo2.cv_results_['mean_test_score']))
-print("MSE:", np.mean(-grid_search_geo2.cv_results_['mean_test_score']))
-print("R2:", np.mean(grid_search_geo2.cv_results_['mean_test_score']))
+# Fit the model
+gb.fit(X_geo2, y_geo2)
+# Print the performance metrics
+print("MAE:", mean_absolute_error(y_geo2, gb.predict(X_geo2)))
+print("MSE:", mean_squared_error(y_geo2, gb.predict(X_geo2)))
+print("R2:", r2_score(y_geo2, gb.predict(X_geo2)))
 print("------------------------")
 
 # XGBoost
 from xgboost import XGBRegressor
-from sklearn.model_selection import GridSearchCV
-import numpy as np
 
 # Define the target variable
 target_var = "All Heart & Circulatory diseases (count)"
@@ -698,36 +648,36 @@ param_grid = {
     'max_depth': [5, 10, 15],
     'learning_rate': [0.1, 0.01, 0.001]
 }
+# Define the XGBoost model
+xgb = XGBRegressor(n_estimators=100, max_depth=5, learning_rate=0.1, random_state=42)
 
-# Define the grid search object
-grid_search = GridSearchCV(estimator=xgb, param_grid=param_grid, cv=10, refit='neg_mean_absolute_error',
-                           scoring={'neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'}, refit_metric='neg_mean_absolute_error')
+# Fit the model to the data for geography 1
+xgb.fit(X_geo1, y_geo1)
 
-# Fit the grid search object to the data for geography 1
-grid_search.fit(X_geo1, y_geo1)
-
-# Print the best hyperparameters and performance metrics for geography 1
+# Print the performance metrics for geography 1
 print("Geography 1 - XGBoost")
-print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", np.mean(-grid_search.cv_results_['mean_test_neg_mean_absolute_error'][grid_search.best_index_]))
-print("MSE: ", np.mean(-grid_search.cv_results_['mean_test_neg_mean_squared_error'][grid_search.best_index_]))
-print("R2: ", np.mean(grid_search.cv_results_['mean_test_r2'][grid_search.best_index_]))
+print("MAE: ", mean_absolute_error(y_geo1, xgb.predict(X_geo1)))
+print("MSE: ", mean_squared_error(y_geo1, xgb.predict(X_geo1)))
+print("R2: ", r2_score(y_geo1, xgb.predict(X_geo1)))
 print("------------------------")
 
+
+# Geography 2
 # Define the features and target variables for geography 2
 X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
 y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
 
-# Fit the grid search object to the data for geography 2
-grid_search.fit(X_geo2, y_geo2)
+# Fit the model to the data for geography 2
+xgb.fit(X_geo2, y_geo2)
 
-# Print the best hyperparameters and performance metrics for geography 2
+# Print the performance metrics for geography 2
 print("Geography 2 - XGBoost")
-print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", np.mean(-grid_search.cv_results_['mean_test_neg_mean_absolute_error'][grid_search.best_index_]))
-print("MSE: ", np.mean(-grid_search.cv_results_['mean_test_neg_mean_squared_error'][grid_search.best_index_]))
-print("R2: ", np.mean(grid_search.cv_results_['mean_test_r2'][grid_search.best_index_]))
+print("MAE: ", mean_absolute_error(y_geo2, xgb.predict(X_geo2)))
+print("MSE: ", mean_squared_error(y_geo2, xgb.predict(X_geo2)))
+print("R2: ", r2_score(y_geo2, xgb.predict(X_geo2)))
 print("------------------------")
+
+
 
 # Compare performance across all models
 # Define the target variable
@@ -737,35 +687,6 @@ target_var = "All Heart & Circulatory diseases (count)"
 # Define the list of models
 models = [("Linear Regression", LinearRegression()),
           ("Ridge Regression", Ridge(alpha=0.5)),
-          ("Lasso Regression", Lasso(alpha=0.1)),
-          ("ElasticNet Regression", ElasticNet(alpha=0.1, l1_ratio=0.5, max_iter=10000)),
-          ("KNN", KNeighborsRegressor(n_neighbors=5)),
-          ("Random Forest", RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)),
-          ("Gradient Boosting", GradientBoostingRegressor(n_estimators=100, max_depth=10, random_state=42)),
-          ("XGBoost", XGBRegressor(n_estimators=100, max_depth=10, random_state=42))]
-
-# Evaluate Models with Grid Search
-import os
-import numpy as np
-import pandas as pd
-from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-from xgboost import XGBRegressor
-from sklearn.model_selection import cross_validate, GridSearchCV
-
-# Define the target variable
-target_var = "All Heart & Circulatory diseases (count)"
-
-# Define hyperparameter grids
-ridge_param_grid = {'alpha': [0.1, 0.5, 1, 5, 10]}
-
-# Import GridSearchCV
-from sklearn.model_selection import GridSearchCV
-
-# Define the list of models
-models = [("Linear Regression", LinearRegression()),
-          ("Ridge Regression", GridSearchCV(Ridge(), ridge_param_grid, scoring='neg_mean_absolute_error', cv=10)),
           ("Lasso Regression", Lasso(alpha=0.1)),
           ("ElasticNet Regression", ElasticNet(alpha=0.1, l1_ratio=0.5, max_iter=10000)),
           ("KNN", KNeighborsRegressor(n_neighbors=5)),
@@ -783,9 +704,9 @@ for model in models:
     cv_results_geo1 = cross_validate(model[1], X_geo1, y_geo1, cv=10,
                                      scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'))
     # Calculate mean performance metrics for geography 1
-    mae_geo1 = np.mean(-cv_results_geo1)
-    mse_geo1 = np.mean(-cv_results_geo1)
-    r2_geo1 = np.mean(cv_results_geo1)
+    mae_geo1 = np.mean(-cv_results_geo1['test_neg_mean_absolute_error'])
+    mse_geo1 = np.mean(-cv_results_geo1['test_neg_mean_squared_error'])
+    r2_geo1 = np.mean(cv_results_geo1['test_r2'])
 
     # Calculate feature importances for tree-based models
     if model[0] in ["Random Forest", "Gradient Boosting", "XGBoost"]:
@@ -803,37 +724,36 @@ for model in models:
     cv_results_geo2 = cross_validate(model[1], X_geo2, y_geo2, cv=10,
                                      scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'))
     # Calculate mean performance metrics for geography 2
-    mae_geo2 = np.mean(-cv_results_geo2)
-    mse_geo2 = np.mean(-cv_results_geo2)
-    r2_geo2 = np.mean(cv_results_geo2)
+    mae_geo2 = np.mean(-cv_results_geo2['test_neg_mean_absolute_error'])
+    mse_geo2 = np.mean(-cv_results_geo2['test_neg_mean_squared_error'])
+    r2_geo2 = np.mean(cv_results_geo2['test_r2'])
 
     # Calculate feature importances for tree-based models
     if model[0] in ["Random Forest", "Gradient Boosting", "XGBoost"]:
         model[1].fit(X_geo2, y_geo2)
         feature_importance_geo2 = model[1].feature_importances_
-        feature_importance_dict_geo2 = {col: imp for col, imp in
-                                        zip(df_geography_2_copy_imputed_sex.columns[:-1], feature_importance_geo2)}
+        feature_importance_dict_geo2 = {col: imp for col, imp in zip(df_geography_2_copy_imputed_sex.columns[:-1], feature_importance_geo2)}
     else:
         feature_importance_dict_geo2 = None
 
     # Append the results for both geographies to the results list
-    results.append({'Model': model[0], 'Geography': 1, 'MAE': mae_geo1, 'MSE': mse_geo1, 'R2': r2_geo1,
-                    'Feature Importance': feature_importance_dict_geo1})
-    results.append({'Model': model[0], 'Geography': 2, 'MAE': mae_geo2, 'MSE': mse_geo2, 'R2': r2_geo2,
-                    'Feature Importance': feature_importance_dict_geo2})
+    results.append({'Model': model[0], 'Geography': 1, 'MAE': mae_geo1, 'MSE': mse_geo1, 'R2': r2_geo1, 'Feature Importance': feature_importance_dict_geo1})
+    results.append({'Model': model[0], 'Geography': 2, 'MAE': mae_geo2, 'MSE': mse_geo2, 'R2': r2_geo2, 'Feature Importance': feature_importance_dict_geo2})
 
-    # Create a dataframe to display the results
-    results_comparison_df = pd.DataFrame(results)
-    print(results_comparison_df)
+# Create a dataframe to display the results
+results_comparison_df = pd.DataFrame(results)
 
-    # Set the file path to the desktop directory
-    comparison_file_path = os.path.join('/Users', 'KarenMarter', 'Desktop', 'comparison_results.csv')
+# Set the file path to the desktop directory
+comparison_file_path = os.path.join('/Users', 'KarenMarter', 'Desktop', 'comparison_results.csv')
 
-    # Output results to a CSV file on the desktop
-    results_comparison_df.to_csv(comparison_file_path, index=False)
+# Output results to a CSV file on the desktop
+results_comparison_df.to_csv(comparison_file_path, index=False)
 
-    # Print confirmation message
-    print('Results saved to', comparison_file_path)
+# Print confirmation message
+print('Results saved to', comparison_file_path)
+
+# Print the results dataframe
+print(results_comparison_df)
 
 
 # Visuals
@@ -935,9 +855,18 @@ for model in models:
         cv_results_geo1 = cross_validate(model[1], X_geo1, y_geo1, cv=10,
                                          scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'))
         # Calculate mean performance metrics for geography 1
-        mae_geo1 = np.mean(-cv_results_geo1)
-        mse_geo1 = np.mean(-cv_results_geo1)
-        r2_geo1 = np.mean(cv_results_geo1)
+        if 'test_neg_mean_absolute_error' in cv_results_geo1:
+            mae_geo1 = np.mean([-score for score in cv_results_geo1['test_neg_mean_absolute_error']])
+        else:
+            mae_geo1 = None
+        if 'test_neg_mean_squared_error' in cv_results_geo1:
+            mse_geo1 = np.mean([-score for score in cv_results_geo1['test_neg_mean_squared_error']])
+        else:
+            mse_geo1 = None
+        if 'test_r2' in cv_results_geo1:
+            r2_geo1 = np.mean(cv_results_geo1['test_r2'])
+        else:
+            r2_geo1 = None
 
         # Define the features and target variables for geography 2
         X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
@@ -946,9 +875,18 @@ for model in models:
         cv_results_geo2 = cross_validate(model[1], X_geo2, y_geo2, cv=10,
                                          scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'))
         # Calculate mean performance metrics for geography 2
-        mae_geo2 = np.mean(-cv_results_geo2)
-        mse_geo2 = np.mean(-cv_results_geo2)
-        r2_geo2 = np.mean(cv_results_geo2)
+        if 'test_neg_mean_absolute_error' in cv_results_geo2:
+            mae_geo2 = np.mean(-cv_results_geo2['test_neg_mean_absolute_error'])
+        else:
+            mae_geo2 = None
+        if 'test_neg_mean_squared_error' in cv_results_geo2:
+            mse_geo2 = np.mean(-cv_results_geo2['test_neg_mean_squared_error'])
+        else:
+            mse_geo2 = None
+        if 'test_r2' in cv_results_geo2:
+            r2_geo2 = np.mean(cv_results_geo2['test_r2'])
+        else:
+            r2_geo2 = None
 
         # Append the results for both geographies to the results list
         results.append({'Model': model[0], 'Geography': 1, 'MAE': mae_geo1, 'MSE': mse_geo1, 'R2': r2_geo1})
