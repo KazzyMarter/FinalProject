@@ -461,7 +461,7 @@ grid_search.fit(X_geo1, y_geo1)
 # print the best hyperparameters and performance metrics
 print("Best hyperparameters: ", grid_search.best_params_)
 print("MAE: ", -grid_search.best_score_)
-print("MSE: ", -grid_search.best_score_['test_neg_mean_squared_error'])
+print("MSE: ", -grid_search.best_score_)
 print("R2: ", grid_search.best_score_['test_r2'])
 print("------------------------")
 
