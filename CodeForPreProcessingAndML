@@ -389,13 +389,13 @@ from sklearn.neural_network import MLPRegressor
 X_train1 = df_geography_1_copy_imputed_sex.iloc[:, :-1]
 
 # define y_train for df_geography_1_copy_imputed_sex
-y_train1 = df_geography_1_copy_imputed_sex['stroke']
+y_train1 = df_geography_1_copy_imputed_sex['Stroke (count)']
 
 # define X_train for df_geography_2_copy_imputed_sex
 X_train2 = df_geography_2_copy_imputed_sex.iloc[:, :-1]
 
 # define y_train for df_geography_2_copy_imputed_sex
-y_train2 = df_geography_2_copy_imputed_sex['stroke']
+y_train2 = df_geography_2_copy_imputed_sex['Stroke (count)']
 
 # define a dictionary of hyperparameters and their possible values for the MLP model
 param_grid = {
