@@ -4,6 +4,7 @@ import os
 # pip install --upgrade pip
 # pip install pandas
 import pandas as pd
+from scipy.stats import ttest_ind
 from sklearn.linear_model import Ridge
 from sklearn.linear_model import Lasso
 from sklearn.linear_model import ElasticNet
@@ -777,7 +778,7 @@ tree_based_models = ["Random Forest", "Gradient Boosting", "XGBoost"]
 for model_name in tree_based_models:
     for geo in range(1, 3):
         # Extract the feature importance dictionaries for the specific models and geographies
-        feature_importance_dict = results_comparison_df.loc[(results_comparison_df['Model'] == 
+        feature_importance_dict = results_comparison_df.loc[(results_comparison_df['Model'] ==
                                                              model_name) & (results_comparison_df['Geography'] == geo), 'Feature Importance'].values[0]
 
         # Plot feature importances
@@ -787,43 +788,77 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 from statsmodels.stats.proportion import proportion_confint
+from scipy.stats import ttest_ind
+
+# create separate dataframes for each geography
+geo1_results = results_comparison_df[results_comparison_df['Geography'] == 1]
+geo2_results = results_comparison_df[results_comparison_df['Geography'] == 2]
+
+# list of models to compare
+models = ['Linear Regression', 'Ridge Regression', 'Lasso Regression', 'ElasticNet Regression',
+          'KNN', 'Random Forest', 'Gradient Boosting', 'XGBoost']
+
+# perform t-tests for each model between the two geographies
+results = []
+for model in models:
+    geo1_model_results = geo1_results[geo1_results['Model'] == model]
+    geo2_model_results = geo2_results[geo2_results['Model'] == model]
+    t_stat, p_val = ttest_ind(geo1_model_results['MAE'], geo2_model_results['MAE'])
+    results.append({'Model': model, 'Geography 1 MAE': geo1_model_results['MAE'].values[0],
+                    'Geography 2 MAE': geo2_model_results['MAE'].values[0], 't-statistic': t_stat,
+                    'p-value': p_val, 'Statistically Different': p_val < 0.05})
+
+results_df3 = pd.DataFrame(results)
+
+# Set the file path to the desktop directory
+comparison_file_path3 = '/Users/KarenMarter/Desktop/comparison_results_all_models.csv'
+
+# Output results to a CSV file on the desktop
+results_df3.to_csv(comparison_file_path3, index=False)
+
+# Print confirmation message
+print('Results saved to', comparison_file_path3)
+
+# Print the results dataframe
+print(results_df3)
+
 
 # Define the geographies
-geographies = [1, 2]
+#geographies = [1, 2]
 
 # Using 'results_comparison_df' DataFrame from earlier code
 # Extract the performance metrics for each model and geography
-metrics = ['MAE', 'MSE', 'R2']
-model_metrics = {}
-for geography in geographies:
-    for model_name in results_comparison_df.loc[results_comparison_df['Geography'] == geography, 'Model'].unique():
-        if model_name not in model_metrics:
-            model_metrics[model_name] = {}
-        for metric in metrics:
-            model_metrics[model_name][metric + f'_geo{geography}'] = results_comparison_df.loc[(results_comparison_df['Model'] == model_name) & (results_comparison_df['Geography'] == geography), metric].values
+#metrics = ['MAE', 'MSE', 'R2']
+#model_metrics = {}
+#for geography in geographies:
+#   for model_name in results_comparison_df.loc[results_comparison_df['Geography'] == geography, 'Model'].unique():
+#      if model_name not in model_metrics:
+    #          model_metrics[model_name] = {}
+        #      for metric in metrics:
+    #           model_metrics[model_name][metric + f'_geo{geography}'] = results_comparison_df.loc[(results_comparison_df['Model'] == model_name) & (results_comparison_df['Geography'] == geography), metric].values
 
 # Perform paired t-test between models for each geography
-alpha = 0.05
-for geography in geographies:
-    for metric in metrics:
-        print(f"Statistical test for {metric} in Geography {geography}:")
-        for model_name_1 in results_comparison_df.loc[results_comparison_df['Geography'] == geography, 'Model'].unique():
-            for model_name_2 in results_comparison_df.loc[results_comparison_df['Geography'] == geography, 'Model'].unique():
-                if model_name_1 == model_name_2:
-                    continue
-                t_stat, p_value = stats.ttest_rel(model_metrics[model_name_1][metric + f'_geo{geography}'], model_metrics[model_name_2][metric + f'_geo{geography}'])
-                print(f"  {model_name_1} vs {model_name_2}: t-statistic = {t_stat:.4f}, p-value = {p_value:.4f}, statistically different = {p_value < alpha}")
+#alpha = 0.05
+#for geography in geographies:
+#   for metric in metrics:
+#      print(f"Statistical test for {metric} in Geography {geography}:")
+        #       for model_name_1 in results_comparison_df.loc[results_comparison_df['Geography'] == geography, 'Model'].unique():
+    #           for model_name_2 in results_comparison_df.loc[results_comparison_df['Geography'] == geography, 'Model'].unique():
+        #               if model_name_1 == model_name_2:
+            #                   continue
+                #               t_stat, p_value = stats.ttest_rel(model_metrics[model_name_1][metric + f'_geo{geography}'], model_metrics[model_name_2][metric + f'_geo{geography}'])
+                #               print(f"  {model_name_1} vs {model_name_2}: t-statistic = {t_stat:.4f}, p-value = {p_value:.4f}, statistically different = {p_value < alpha}")
 
 # Calculate confidence intervals for the performance metrics for each geography
-confidence_level = 0.95
-for geography in geographies:
-    for metric in metrics:
-        print(f"Confidence intervals for {metric} in Geography {geography}:")
-        for model_name in results_comparison_df.loc[results_comparison_df['Geography'] == geography, 'Model'].unique():
-            mean_metric = np.mean(model_metrics[model_name][metric + f'_geo{geography}'])
-            se_metric = stats.sem(model_metrics[model_name][metric + f'_geo{geography}'])
-            ci_lower, ci_upper = stats.t.interval(alpha=confidence_level, df=len(model_metrics[model_name][metric + f'_geo{geography}'])-1, loc=mean_metric, scale=se_metric)
-            print(f"  {model_name}: mean = {mean_metric:.4f}, lower CI = {ci_lower:.4f}, upper CI = {ci_upper:.4f}")
+#confidence_level = 0.95
+#for geography in geographies:
+#   for metric in metrics:
+#       print(f"Confidence intervals for {metric} in Geography {geography}:")
+        #        for model_name in results_comparison_df.loc[results_comparison_df['Geography'] == geography, 'Model'].unique():
+#            mean_metric = np.mean(model_metrics[model_name][metric + f'_geo{geography}'])
+#            se_metric = stats.sem(model_metrics[model_name][metric + f'_geo{geography}'])
+ #           ci_lower, ci_upper = stats.t.interval(alpha=confidence_level, df=len(model_metrics[model_name][metric + f'_geo{geography}'])-1, loc=mean_metric, scale=se_metric)
+ #           print(f"  {model_name}: mean = {mean_metric:.4f}, lower CI = {ci_lower:.4f}, upper CI = {ci_upper:.4f}")
 
 # Visuals
 import os
