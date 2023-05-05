@@ -462,7 +462,7 @@ grid_search.fit(X_geo1, y_geo1)
 print("Best hyperparameters: ", grid_search.best_params_)
 print("MAE: ", -grid_search.best_score_)
 print("MSE: ", -grid_search.best_score_)
-print("R2: ", grid_search.best_score_['test_r2'])
+print("R2: ", grid_search.best_score_)
 print("------------------------")
 
 # perform grid search for Geography 2
@@ -474,9 +474,9 @@ y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
 grid_search.fit(X_geo2, y_geo2)
 # print the best hyperparameters and performance metrics
 print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", -grid_search.best_score_['test_neg_mean_absolute_error'])
-print("MSE: ", -grid_search.best_score_['test_neg_mean_squared_error'])
-print("R2: ", grid_search.best_score_['test_r2'])
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
 print("------------------------")
 
 # SVM
@@ -506,9 +506,9 @@ y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
 grid_search.fit(X_geo1, y_geo1)
 # Print the best hyperparameters and performance metrics
 print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", -grid_search.best_score_['test_neg_mean_absolute_error'])
-print("MSE: ", -grid_search.best_score_['test_neg_mean_squared_error'])
-print("R2: ", grid_search.best_score_['test_r2'])
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
 print("------------------------")
 
 # Perform grid search for Geography 2
@@ -520,9 +520,9 @@ y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
 grid_search.fit(X_geo2, y_geo2)
 # Print the best hyperparameters and performance metrics
 print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", -grid_search.best_score_['test_neg_mean_absolute_error'])
-print("MSE: ", -grid_search.best_score_['test_neg_mean_squared_error'])
-print("R2: ", grid_search.best_score_['test_r2'])
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
 print("------------------------")
 
 # KNN
@@ -553,9 +553,9 @@ y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
 grid_search.fit(X_geo1, y_geo1)
 # Print the best hyperparameters and performance metrics
 print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", -grid_search.best_score_['test_neg_mean_absolute_error'])
-print("MSE: ", -grid_search.best_score_['test_neg_mean_squared_error'])
-print("R2: ", grid_search.best_score_['test_r2'])
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
 print("------------------------")
 
 # Perform grid search for Geography 2
@@ -567,9 +567,9 @@ y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
 grid_search.fit(X_geo2, y_geo2)
 # Print the best hyperparameters and performance metrics
 print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", -grid_search.best_score_['test_neg_mean_absolute_error'])
-print("MSE: ", -grid_search.best_score_['test_neg_mean_squared_error'])
-print("R2: ", grid_search.best_score_['test_r2'])
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
 print("------------------------")
 
 # Random Forest
@@ -601,9 +601,9 @@ y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
 grid_search.fit(X_geo1, y_geo1)
 # Print the best hyperparameters and performance metrics
 print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", -grid_search.best_score_['test_neg_mean_absolute_error'])
-print("MSE: ", -grid_search.best_score_['test_neg_mean_squared_error'])
-print("R2: ", grid_search.best_score_['test_r2'])
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
 print("------------------------")
 
 # Perform grid search for Geography 2
@@ -615,9 +615,9 @@ y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
 grid_search.fit(X_geo2, y_geo2)
 # Print the best hyperparameters and performance metrics
 print("Best hyperparameters: ", grid_search.best_params_)
-print("MAE: ", -grid_search.best_score_['test_neg_mean_absolute_error'])
-print("MSE: ", -grid_search.best_score_['test_neg_mean_squared_error'])
-print("R2: ", grid_search.best_score_['test_r2'])
+print("MAE: ", -grid_search.best_score_)
+print("MSE: ", -grid_search.best_score_)
+print("R2: ", grid_search.best_score_)
 print("------------------------")
 
 # Gradient Boosting
@@ -777,9 +777,9 @@ for model in models:
     cv_results_geo1 = cross_validate(model[1], X_geo1, y_geo1, cv=10,
                                      scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'))
     # Calculate mean performance metrics for geography 1
-    mae_geo1 = np.mean(-cv_results_geo1['test_neg_mean_absolute_error'])
-    mse_geo1 = np.mean(-cv_results_geo1['test_neg_mean_squared_error'])
-    r2_geo1 = np.mean(cv_results_geo1['test_r2'])
+    mae_geo1 = np.mean(-cv_results_geo1)
+    mse_geo1 = np.mean(-cv_results_geo1)
+    r2_geo1 = np.mean(cv_results_geo1)
 
     # Calculate feature importances for tree-based models
     if model[0] in ["Random Forest", "Gradient Boosting", "XGBoost"]:
@@ -797,9 +797,9 @@ for model in models:
     cv_results_geo2 = cross_validate(model[1], X_geo2, y_geo2, cv=10,
                                      scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'))
     # Calculate mean performance metrics for geography 2
-    mae_geo2 = np.mean(-cv_results_geo2['test_neg_mean_absolute_error'])
-    mse_geo2 = np.mean(-cv_results_geo2['test_neg_mean_squared_error'])
-    r2_geo2 = np.mean(cv_results_geo2['test_r2'])
+    mae_geo2 = np.mean(-cv_results_geo2)
+    mse_geo2 = np.mean(-cv_results_geo2)
+    r2_geo2 = np.mean(cv_results_geo2)
 
     # Calculate feature importances for tree-based models
     if model[0] in ["Random Forest", "Gradient Boosting", "XGBoost"]:
@@ -929,9 +929,9 @@ for model in models:
         cv_results_geo1 = cross_validate(model[1], X_geo1, y_geo1, cv=10,
                                          scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'))
         # Calculate mean performance metrics for geography 1
-        mae_geo1 = np.mean(-cv_results_geo1['test_neg_mean_absolute_error'])
-        mse_geo1 = np.mean(-cv_results_geo1['test_neg_mean_squared_error'])
-        r2_geo1 = np.mean(cv_results_geo1['test_r2'])
+        mae_geo1 = np.mean(-cv_results_geo1)
+        mse_geo1 = np.mean(-cv_results_geo1)
+        r2_geo1 = np.mean(cv_results_geo1)
 
         # Define the features and target variables for geography 2
         X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
@@ -940,9 +940,9 @@ for model in models:
         cv_results_geo2 = cross_validate(model[1], X_geo2, y_geo2, cv=10,
                                          scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'))
         # Calculate mean performance metrics for geography 2
-        mae_geo2 = np.mean(-cv_results_geo2['test_neg_mean_absolute_error'])
-        mse_geo2 = np.mean(-cv_results_geo2['test_neg_mean_squared_error'])
-        r2_geo2 = np.mean(cv_results_geo2['test_r2'])
+        mae_geo2 = np.mean(-cv_results_geo2)
+        mse_geo2 = np.mean(-cv_results_geo2)
+        r2_geo2 = np.mean(cv_results_geo2)
 
         # Append the results for both geographies to the results list
         results.append({'Model': model[0], 'Geography': 1, 'MAE': mae_geo1, 'MSE': mse_geo1, 'R2': r2_geo1})
