@@ -777,7 +777,8 @@ tree_based_models = ["Random Forest", "Gradient Boosting", "XGBoost"]
 for model_name in tree_based_models:
     for geo in range(1, 3):
         # Extract the feature importance dictionaries for the specific models and geographies
-        feature_importance_dict = results_comparison_df.loc[(results_comparison_df['Model'] == model_name) & (results_comparison_df['Geography'] == geo), 'Feature Importance'].values[0]
+        feature_importance_dict = results_comparison_df.loc[(results_comparison_df['Model'] == 
+                                                             model_name) & (results_comparison_df['Geography'] == geo), 'Feature Importance'].values[0]
 
         # Plot feature importances
         plot_feature_importance(feature_importance_dict, f'{model_name} Feature Importances (Geography {geo})')
