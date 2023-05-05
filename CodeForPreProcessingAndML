@@ -12,6 +12,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
 from sklearn.neural_network import MLPRegressor
+from sklearn.model_selection import train_test_split
 
 # Set the path to desktop directory
 desktop_path = os.path.join(os.path.expanduser('~'), 'Desktop')
@@ -449,7 +450,9 @@ nn = MLPRegressor(random_state=42)
 
 # define the grid search object
 grid_search = GridSearchCV(nn, param_grid=param_grid, cv=10, refit='neg_mean_absolute_error',
-                           scoring={'neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'}, refit_metric='neg_mean_absolute_error')
+                           scoring={'neg_mean_absolute_error': 'neg_mean_absolute_error',
+                                    'neg_mean_squared_error': 'neg_mean_squared_error',
+                                    'r2': 'r2'})
 
 # perform grid search for Geography 1
 print("Geography 1 - Neural Network")
@@ -494,8 +497,11 @@ param_grid = {
 svm = SVR()
 
 # Define the grid search object
-grid_search = GridSearchCV(svm, param_grid=param_grid, cv=10, 
-                           scoring=('neg_mean_absolute_error', 'neg_mean_squared_error', 'r2'), refit='neg_mean_absolute_error')
+grid_search = GridSearchCV(svm, param_grid=param_grid, cv=10,
+                           scoring={'neg_mean_absolute_error': make_scorer(mean_absolute_error),
+                                    'neg_mean_squared_error': make_scorer(mean_squared_error),
+                                    'r2': make_scorer(r2_score)},
+                           refit='neg_mean_absolute_error', return_train_score=True)
 
 # Perform grid search for Geography 1
 print("Geography 1 - SVM")
