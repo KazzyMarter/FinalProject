@@ -1,0 +1,1583 @@
+/Users/KarenMarter/Desktop
+--------------Exploring & Cleaning the Dataset ----------------
+      Year     Sex  ...                               OriginalIndicator DATA
+0  2005/06  Person  ...  Heart and circulatory diseases (CVD) (I00-I99)  NaN
+1  2005/06  Person  ...               Coronary heart disease  (I20-I25)  NaN
+2  2005/06  Person  ...                 Myocardial infarction (I21-I22)  NaN
+3  2005/06  Person  ...                       Atrial fibrillation (I48)  NaN
+4  2005/06  Person  ...                             Heart Failure (I50)  NaN
+
+[5 rows x 8 columns]
+Index(['Year', 'Sex', 'Geography', 'Theme', 'RenamedIndicator',
+       'IndicatorForPython', 'OriginalIndicator', 'DATA'],
+      dtype='object')
+Year                  object
+Sex                   object
+Geography             object
+Theme                 object
+RenamedIndicator      object
+IndicatorForPython    object
+OriginalIndicator     object
+DATA                  object
+dtype: object
+['2005/06' '2006/07' '2007/08' '2008/09' '2009/10' '2010/11' '2011/12'
+ '2012/13' '2013/14' '2014/15' '2015/16' '2016/17' '2017/18' '2018/19'
+ '2019/20' '2020/21' '2021/22' '2008' '2009' '2010' '2011' '2012' '2013'
+ '2014' '2015' '2016' '2017' '2018' '2019' '2021' '1993' '1994' '1995'
+ '1996' '1997' '1998' '1999' '2000' '2001' '2002' '2003' '2004' '2005'
+ '2006' '2007' '2020']
+['Person' 'Male' 'Female' 'Persons' 'All']
+['England' 'Scotland' 'Wales' 'Northern Ireland' 'United Kingdom']
+['CVD' 'Atrial Fib' 'Smoking' 'Obesity' 'Activity / Exercise' 'Alcohol'
+ 'Diet' 'diet' 'Age' 'Diabetes']
+['CVD - All inpatient admission - Heart and circulatory diseases (CVD) (I00-I99)'
+ 'CVD - All inpatient admission - Coronary heart disease  (I20-I25)'
+ 'CVD - All inpatient admission - Myocardial infarction (I21-I22)'
+ 'CVD - All inpatient admission - Atrial fibrillation (I48)'
+ 'CVD - All inpatient admission - Heart Failure (I50)'
+ 'CVD - All inpatient admission - Stroke (I60-I69)'
+ 'CVD - All inpatient admission - Other cardiovascular disease (I00-99 only; not listed above)'
+ 'Atrial Fib - % of Atrial Fibrillation'
+ 'CVD - % Heart failure prevalence' 'CVD - % CVD prevalence'
+ 'Smoking - % Current Smokers' 'Smoking - % Ex-smokers '
+ 'Smoking - % Never smoked '
+ 'Obesity - Percentage of adults (aged 18 plus) classified as overweight or obese'
+ 'Obesity - Classified as obese'
+ 'Activity / Exercise - Percentage of physically active adults'
+ 'Activity / Exercise - Inactive - Percentage of physically active adults'
+ 'Alcohol - % Proportion who drank alcohol in the last week'
+ 'Alcohol - Alcohol consumption (mean weekly units)'
+ 'Smoking - Never smoked/Used to smoke occasionally - Smoking status'
+ 'Smoking - Used to smoke regularly - Smoking status'
+ 'Smoking - Current smoker - Smoking status'
+ 'CVD - Any cardiovascular condition'
+ 'Diet - Food insecurity (worried would run out of food) - Yes'
+ 'Diet - Food insecurity (worried would run out of food) - No'
+ 'Diet - Fruit & vegetable consumption (guidelines) - None'
+ 'Diet - Fruit & vegetable consumption (guidelines) - Less than 5 portions'
+ 'Diet - Fruit & vegetable consumption (guidelines) - 5 portions or more'
+ 'Obesity - Mean BMI' 'diet - Fruit & Vegetables (5+ portions per day)'
+ 'diet - Fruit & Vegetables - Average No. of portions per day'
+ 'Activity / Exercise - Summary activity levels - Meets recommendations'
+ 'Activity / Exercise - Summary activity levels - Low activity'
+ 'Activity / Exercise - Summary activity levels - Very low activity'
+ 'Atrial Fib - Diagnosed Atrial Fibrillation' 'Age - Median age (years)'
+ 'Age - Median age of death (years)'
+ 'Diabetes - Diabetes: QOF prevalence (17+ yrs)'
+ 'Diabetes - Percentage of people with type 1 diabetes who are male'
+ 'Diabetes - Percentage of people with type 1 diabetes who are female'
+ 'Diabetes - Percentage of people with type 2 diabetes who are male'
+ 'Diabetes - Percentage of people with type 2 diabetes who are female']
+['All Heart & Circulatory diseases %' 'Coronary Heart Disease %'
+ 'Myocardial infarction %' 'Atrial fibrillation %' 'Heart Failure %'
+ 'Stroke %' 'Other cardiovascular disease %'
+ 'Atrial Fib - % of Atrial Fibrillation' 'Current smoker %' 'Ex-smoker %'
+ 'Never smoked %' 'Overweight or obese adults %' 'Obese adults %'
+ 'Activity / Exercise - Percentage of physically active adults'
+ 'Activity / Exercise - Inactive - Percentage of physically active adults'
+ 'Alcohol - % Proportion who drank alcohol in the last week'
+ 'Alcohol - Alcohol consumption (mean weekly units)'
+ 'Never smoked % (other measure)' 'Ex-smoker % (other measure)'
+ 'Current smoker % (other measure)' 'CVD %'
+ 'Food insecurity (worried would run out of food) - Yes'
+ 'Food insecurity (worried would run out of food) - No'
+ 'Fruit & vegetable consumption (guidelines) - None'
+ 'Fruit & vegetable consumption (guidelines) - Less than 5 portions'
+ 'Fruit & Vegetables (5+ portions per day)' 'Obesity - Mean BMI'
+ 'Fruit & Vegetables - Average No. of portions per day'
+ 'Activity / Exercise - Summary activity levels - Low activity'
+ 'Activity / Exercise - Summary activity levels - Very low activity'
+ 'Atrial Fib - Diagnosed Atrial Fibrillation' 'Age - Median age (years)'
+ 'Age - Median age of death (years)' 'With Diabetes (both types) %'
+ 'With Diabetes (type 1) %' 'With Diabetes (type 2) %']
+['Heart and circulatory diseases (CVD) (I00-I99)'
+ 'Coronary heart disease  (I20-I25)' 'Myocardial infarction (I21-I22)'
+ 'Atrial fibrillation (I48)' 'Heart Failure (I50)' 'Stroke (I60-I69)'
+ 'Other cardiovascular disease (I00-99 only; not listed above)'
+ '% of Atrial Fibrillation' '% Heart failure prevalence'
+ '% CVD prevalence' '% Current Smokers' '% Ex-smokers ' '% Never smoked '
+ 'Percentage of adults (aged 18 plus) classified as overweight or obese'
+ 'Classified as obese' 'Percentage of physically active adults'
+ '% Proportion who drank alcohol in the last week'
+ 'Alcohol consumption (mean weekly units)' 'Smoking status'
+ 'Any cardiovascular condition'
+ 'Food insecurity (worried would run out of food)'
+ 'Fruit & vegetable consumption (guidelines)' 'Mean BMI'
+ 'Fruit & Vegetables (5+ portions per day)'
+ 'Fruit & Vegetables - Average No. of portions per day'
+ 'Summary activity levels' 'Diagnosed Atrial Fibrillation'
+ 'Median age (years)' 'Median age of death (years)'
+ 'Diabetes: QOF prevalence (17+ yrs)'
+ 'Percentage of people with type 1 diabetes who are male'
+ 'Percentage of people with type 1 diabetes who are female'
+ 'Percentage of people with type 2 diabetes who are male'
+ 'Percentage of people with type 2 diabetes who are female']
+[nan '54,249' '17,428' ... '44.14712' '44.14711695' '44.28523']
+[3 1 2]
+['2005' '2006' '2007' '2008' '2009' '2010' '2011' '2012' '2013' '2014'
+ '2015' '2016' '2017' '2018' '2019' '2020' '2021' '1993' '1994' '1995'
+ '1996' '1997' '1998' '1999' '2000' '2001' '2002' '2003' '2004']
+Year                    int64
+Sex                     int64
+Geography             float64
+Theme                  object
+RenamedIndicator       object
+IndicatorForPython     object
+OriginalIndicator      object
+DATA                  float64
+dtype: object
+Column Headings:
+Index(['Year', 'Sex', 'Geography', 'Theme', 'RenamedIndicator',
+       'IndicatorForPython', 'OriginalIndicator', 'DATA'],
+      dtype='object')
+
+Data Types:
+Exporting cleaned data to csv to check
+Exporting reshaped data to csv to check
+Proportion of non-missing cells for each column, split by 'Sex' and 'Geography' saved to /Users/KarenMarter/Desktop/proportions_by_sex_geography.csv
+Imputed DataFrame 'df_geography_1_copy_imputed_sex' has been saved to /Users/KarenMarter/Desktop/df_geography_1_copy_imputed_sex.csv
+No. of variables in England dataframe before dropping CVD related variables
+(45, 22)
+No. of variables in England dataframe after dropping CVD related variables
+(45, 17)
+Imputed DataFrame 'df_geography_2_copy_imputed_sex' has been saved to /Users/KarenMarter/Desktop/df_geography_2_copy_imputed_sex.csv
+No. of variables in Scotland dataframe before dropping CVD related variables
+(42, 28)
+No. of variables in Scotland dataframe after dropping CVD related variables
+(42, 23)
+------------- Feature Selection - Filter Method -------------
+Selected features for Geography 1:
+Index(['Sex', 'Other cardiovascular disease (count)', 'Stroke (count)'], dtype='object', name='IndicatorForPython')
+Selected features for Geography 2:
+Index([], dtype='object', name='IndicatorForPython')
+------------------ Feature Selection - Wrapper Method -------------------
+Geography 1 - Linear Regression: Optimal number of features: 10
+Geography 1 - Linear Regression: Feature Ranking:
+Year: 4
+Sex: 1
+Geography: 7
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - % Proportion who drank alcohol in the last week: 1
+Current smoker %: 3
+Ex-smoker %: 1
+Fruit & Vegetables (5+ portions per day): 2
+Fruit & Vegetables - Average No. of portions per day: 1
+Never smoked %: 1
+Obesity - Mean BMI: 1
+Other cardiovascular disease (count): 6
+Stroke (count): 5
+With Diabetes (type 1) %: 1
+With Diabetes (type 2) %: 1
+
+
+Geography 1 - Ridge Regression: Optimal number of features: 11
+Geography 1 - Ridge Regression: Feature Ranking:
+Year: 3
+Sex: 1
+Geography: 6
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - % Proportion who drank alcohol in the last week: 1
+Current smoker %: 2
+Ex-smoker %: 1
+Fruit & Vegetables (5+ portions per day): 1
+Fruit & Vegetables - Average No. of portions per day: 1
+Never smoked %: 1
+Obesity - Mean BMI: 1
+Other cardiovascular disease (count): 5
+Stroke (count): 4
+With Diabetes (type 1) %: 1
+With Diabetes (type 2) %: 1
+
+
+Geography 1 - Lasso Regression: Optimal number of features: 10
+Geography 1 - Lasso Regression: Feature Ranking:
+Year: 4
+Sex: 1
+Geography: 7
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - % Proportion who drank alcohol in the last week: 1
+Current smoker %: 3
+Ex-smoker %: 1
+Fruit & Vegetables (5+ portions per day): 2
+Fruit & Vegetables - Average No. of portions per day: 1
+Never smoked %: 1
+Obesity - Mean BMI: 1
+Other cardiovascular disease (count): 6
+Stroke (count): 5
+With Diabetes (type 1) %: 1
+With Diabetes (type 2) %: 1
+
+
+Geography 1 - ElasticNet Regression: Optimal number of features: 14
+Geography 1 - ElasticNet Regression: Feature Ranking:
+Year: 1
+Sex: 1
+Geography: 3
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - % Proportion who drank alcohol in the last week: 1
+Current smoker %: 1
+Ex-smoker %: 1
+Fruit & Vegetables (5+ portions per day): 1
+Fruit & Vegetables - Average No. of portions per day: 1
+Never smoked %: 1
+Obesity - Mean BMI: 1
+Other cardiovascular disease (count): 2
+Stroke (count): 1
+With Diabetes (type 1) %: 1
+With Diabetes (type 2) %: 1
+
+
+Geography 1 - Random Forest: Optimal number of features: 14
+Geography 1 - Random Forest: Feature Ranking:
+Year: 1
+Sex: 1
+Geography: 3
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - % Proportion who drank alcohol in the last week: 1
+Current smoker %: 1
+Ex-smoker %: 1
+Fruit & Vegetables (5+ portions per day): 1
+Fruit & Vegetables - Average No. of portions per day: 1
+Never smoked %: 2
+Obesity - Mean BMI: 1
+Other cardiovascular disease (count): 1
+Stroke (count): 1
+With Diabetes (type 1) %: 1
+With Diabetes (type 2) %: 1
+
+
+Geography 1 - Gradient Boosting: Optimal number of features: 13
+Geography 1 - Gradient Boosting: Feature Ranking:
+Year: 1
+Sex: 1
+Geography: 4
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - % Proportion who drank alcohol in the last week: 1
+Current smoker %: 1
+Ex-smoker %: 1
+Fruit & Vegetables (5+ portions per day): 1
+Fruit & Vegetables - Average No. of portions per day: 1
+Never smoked %: 1
+Obesity - Mean BMI: 2
+Other cardiovascular disease (count): 1
+Stroke (count): 1
+With Diabetes (type 1) %: 3
+With Diabetes (type 2) %: 1
+
+
+Geography 1 - XGBoost: Optimal number of features: 1
+Geography 1 - XGBoost: Feature Ranking:
+Year: 7
+Sex: 1
+Geography: 16
+Age - Median age (years): 2
+Age - Median age of death (years): 14
+Alcohol - % Proportion who drank alcohol in the last week: 6
+Current smoker %: 13
+Ex-smoker %: 8
+Fruit & Vegetables (5+ portions per day): 5
+Fruit & Vegetables - Average No. of portions per day: 11
+Never smoked %: 9
+Obesity - Mean BMI: 12
+Other cardiovascular disease (count): 4
+Stroke (count): 3
+With Diabetes (type 1) %: 15
+With Diabetes (type 2) %: 10
+
+
+Geography 2 - Linear Regression: Optimal number of features: 21
+Geography 2 - Linear Regression: Feature Ranking:
+Year: 1
+Sex: 1
+Geography: 2
+Activity / Exercise - Percentage of physically active adults: 1
+Activity / Exercise - Summary activity levels - Low activity: 1
+Activity / Exercise - Summary activity levels - Very low activity: 1
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - Alcohol consumption (mean weekly units): 1
+CVD %: 1
+Current smoker %: 1
+Current smoker % (other measure): 1
+Ex-smoker %: 1
+Ex-smoker % (other measure): 1
+Fruit & Vegetables (5+ portions per day): 1
+Fruit & vegetable consumption (guidelines) - Less than 5 portions: 1
+Fruit & vegetable consumption (guidelines) - None: 1
+Never smoked %: 1
+Never smoked % (other measure): 1
+Obese adults %: 1
+Other cardiovascular disease (count): 1
+Stroke (count): 1
+
+
+Geography 2 - Ridge Regression: Optimal number of features: 2
+Geography 2 - Ridge Regression: Feature Ranking:
+Year: 11
+Sex: 1
+Geography: 21
+Activity / Exercise - Percentage of physically active adults: 13
+Activity / Exercise - Summary activity levels - Low activity: 14
+Activity / Exercise - Summary activity levels - Very low activity: 15
+Age - Median age (years): 10
+Age - Median age of death (years): 1
+Alcohol - Alcohol consumption (mean weekly units): 12
+CVD %: 2
+Current smoker %: 9
+Current smoker % (other measure): 6
+Ex-smoker %: 17
+Ex-smoker % (other measure): 16
+Fruit & Vegetables (5+ portions per day): 8
+Fruit & vegetable consumption (guidelines) - Less than 5 portions: 5
+Fruit & vegetable consumption (guidelines) - None: 3
+Never smoked %: 18
+Never smoked % (other measure): 7
+Obese adults %: 4
+Other cardiovascular disease (count): 20
+Stroke (count): 19
+
+
+Geography 2 - Lasso Regression: Optimal number of features: 2
+Geography 2 - Lasso Regression: Feature Ranking:
+Year: 17
+Sex: 1
+Geography: 21
+Activity / Exercise - Percentage of physically active adults: 11
+Activity / Exercise - Summary activity levels - Low activity: 15
+Activity / Exercise - Summary activity levels - Very low activity: 16
+Age - Median age (years): 10
+Age - Median age of death (years): 1
+Alcohol - Alcohol consumption (mean weekly units): 9
+CVD %: 2
+Current smoker %: 13
+Current smoker % (other measure): 7
+Ex-smoker %: 14
+Ex-smoker % (other measure): 12
+Fruit & Vegetables (5+ portions per day): 5
+Fruit & vegetable consumption (guidelines) - Less than 5 portions: 4
+Fruit & vegetable consumption (guidelines) - None: 3
+Never smoked %: 18
+Never smoked % (other measure): 8
+Obese adults %: 6
+Other cardiovascular disease (count): 20
+Stroke (count): 19
+
+
+Geography 2 - ElasticNet Regression: Optimal number of features: 2
+Geography 2 - ElasticNet Regression: Feature Ranking:
+Year: 12
+Sex: 1
+Geography: 21
+Activity / Exercise - Percentage of physically active adults: 16
+Activity / Exercise - Summary activity levels - Low activity: 15
+Activity / Exercise - Summary activity levels - Very low activity: 9
+Age - Median age (years): 11
+Age - Median age of death (years): 1
+Alcohol - Alcohol consumption (mean weekly units): 14
+CVD %: 2
+Current smoker %: 8
+Current smoker % (other measure): 6
+Ex-smoker %: 17
+Ex-smoker % (other measure): 10
+Fruit & Vegetables (5+ portions per day): 18
+Fruit & vegetable consumption (guidelines) - Less than 5 portions: 5
+Fruit & vegetable consumption (guidelines) - None: 3
+Never smoked %: 13
+Never smoked % (other measure): 7
+Obese adults %: 4
+Other cardiovascular disease (count): 20
+Stroke (count): 19
+
+
+Geography 2 - Random Forest: Optimal number of features: 1
+Geography 2 - Random Forest: Feature Ranking:
+Year: 4
+Sex: 2
+Geography: 22
+Activity / Exercise - Percentage of physically active adults: 8
+Activity / Exercise - Summary activity levels - Low activity: 21
+Activity / Exercise - Summary activity levels - Very low activity: 10
+Age - Median age (years): 5
+Age - Median age of death (years): 6
+Alcohol - Alcohol consumption (mean weekly units): 13
+CVD %: 17
+Current smoker %: 11
+Current smoker % (other measure): 15
+Ex-smoker %: 7
+Ex-smoker % (other measure): 20
+Fruit & Vegetables (5+ portions per day): 18
+Fruit & vegetable consumption (guidelines) - Less than 5 portions: 12
+Fruit & vegetable consumption (guidelines) - None: 14
+Never smoked %: 9
+Never smoked % (other measure): 16
+Obese adults %: 19
+Other cardiovascular disease (count): 1
+Stroke (count): 3
+
+
+Geography 2 - Gradient Boosting: Optimal number of features: 1
+Geography 2 - Gradient Boosting: Feature Ranking:
+Year: 4
+Sex: 2
+Geography: 22
+Activity / Exercise - Percentage of physically active adults: 15
+Activity / Exercise - Summary activity levels - Low activity: 18
+Activity / Exercise - Summary activity levels - Very low activity: 20
+Age - Median age (years): 5
+Age - Median age of death (years): 6
+Alcohol - Alcohol consumption (mean weekly units): 12
+CVD %: 17
+Current smoker %: 7
+Current smoker % (other measure): 10
+Ex-smoker %: 8
+Ex-smoker % (other measure): 21
+Fruit & Vegetables (5+ portions per day): 13
+Fruit & vegetable consumption (guidelines) - Less than 5 portions: 14
+Fruit & vegetable consumption (guidelines) - None: 19
+Never smoked %: 9
+Never smoked % (other measure): 11
+Obese adults %: 16
+Other cardiovascular disease (count): 1
+Stroke (count): 3
+
+
+Geography 2 - XGBoost: Optimal number of features: 9
+Geography 2 - XGBoost: Feature Ranking:
+Year: 1
+Sex: 1
+Geography: 14
+Activity / Exercise - Percentage of physically active adults: 4
+Activity / Exercise - Summary activity levels - Low activity: 6
+Activity / Exercise - Summary activity levels - Very low activity: 5
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - Alcohol consumption (mean weekly units): 1
+CVD %: 1
+Current smoker %: 1
+Current smoker % (other measure): 7
+Ex-smoker %: 1
+Ex-smoker % (other measure): 9
+Fruit & Vegetables (5+ portions per day): 11
+Fruit & vegetable consumption (guidelines) - Less than 5 portions: 10
+Fruit & vegetable consumption (guidelines) - None: 3
+Never smoked %: 13
+Never smoked % (other measure): 12
+Obese adults %: 8
+Other cardiovascular disease (count): 1
+Stroke (count): 2
+
+
+Best hyperparameters for df_geography_1_copy_imputed_sex:  {'activation': 'relu', 'alpha': 0.0001, 'hidden_layer_sizes': (10,), 'learning_rate': 'adaptive', 'solver': 'adam'}
+Best score for df_geography_1_copy_imputed_sex:  -0.8667092988503778
+Best hyperparameters for df_geography_2_copy_imputed_sex:  {'activation': 'relu', 'alpha': 0.01, 'hidden_layer_sizes': (100,), 'learning_rate': 'adaptive', 'solver': 'adam'}
+Best score for df_geography_2_copy_imputed_sex:  -0.2710302618937485
+----------------- Neural Networks ------------------
+Geography 1 - Neural Network
+MAE:  35491.0838701736
+MSE:  1526040968.1512616
+R2:  0.971671639952826
+------------------------
+Geography 2 - Neural Network
+MAE:  13443.120376495015
+MSE:  366339364.6084586
+R2:  0.8804895999088571
+------------------------
+-------------------- SVM ---------------------
+Geography 1 - SVM
+MAE:  186577.78249398243
+MSE:  61245203756.83781
+R2:  -0.13691324112227865
+------------------------
+Geography 2 - SVM
+MAE:  25490.331152141243
+MSE:  3357935720.243226
+R2:  -0.09545487101972716
+------------------------
+--------------------- KNN ------------------------
+Geography 1 - KNN
+MAE:  28795.92457217988
+MSE:  5390610455.42294
+R2:  0.8999324677106932
+------------------------
+Geography 2 - KNN
+MAE:  9546.492246642247
+MSE:  1915517552.941233
+R2:  0.37510327513319086
+------------------------
+------------------------ Random Forest ---------------------------
+Geography 1 - Random Forest
+MAE:  7881.044464871655
+MSE:  295923158.94819915
+R2:  0.994506688897653
+------------------------
+Geography 2 - Random Forest
+MAE:  4101.509313681022
+MSE:  394768670.6726638
+R2:  0.8712151454813947
+------------------------
+------------------------ Gradient Boosting -----------------------
+Geography 1 - Gradient Boosting
+MAE: 0.44391423845146266
+MSE: 0.2968035509779864
+R2: 0.9999999999944903
+------------------------
+Geography 2 - Gradient Boosting
+MAE: 0.03775000351838355
+MSE: 0.001997711549921673
+R2: 0.9999999999993483
+------------------------
+--------------------- XGBoost ------------------------
+Geography 1 - XGBoost
+MAE:  539.6723110317433
+MSE:  588532.6357748302
+R2:  0.9999890748906788
+------------------------
+Geography 2 - XGBoost
+MAE:  78.54268734737464
+MSE:  127111.52913487026
+R2:  0.9999585325761556
+------------------------
+--------------- Comparing Model Performances ------------------
+Results saved to /Users/KarenMarter/Desktop/comparison_results.csv
+                    Model  ...                                 Feature Importance
+0       Linear Regression  ...                                               None
+1       Linear Regression  ...                                               None
+2        Ridge Regression  ...                                               None
+3        Ridge Regression  ...                                               None
+4        Lasso Regression  ...                                               None
+5        Lasso Regression  ...                                               None
+6   ElasticNet Regression  ...                                               None
+7   ElasticNet Regression  ...                                               None
+8                     KNN  ...                                               None
+9                     KNN  ...                                               None
+10          Random Forest  ...  {'Year': 0.00048357259225998957, 'Sex': 0.3364...
+11          Random Forest  ...  {'Year': 0.01716761143869629, 'Sex': 0.1603362...
+12      Gradient Boosting  ...  {'Year': 0.0005069188233991378, 'Sex': 0.43815...
+13      Gradient Boosting  ...  {'Year': 0.008489379640759976, 'Sex': 0.085059...
+14                XGBoost  ...  {'Year': 4.4326232e-05, 'Sex': 0.98690563, 'Ge...
+15                XGBoost  ...  {'Year': 0.0011715927, 'Sex': 0.4445141, 'Geog...
+
+[16 rows x 6 columns]
+-------------- Plotting Feature Importance ----------------
+Results saved to /Users/KarenMarter/Desktop/comparison_results_all_models.csv
+                   Model  Geography 1 MAE  ...  p-value  Statistically Different
+0      Linear Regression     24502.751089  ...      NaN                    False
+1       Ridge Regression     30496.330928  ...      NaN                    False
+2       Lasso Regression     24415.318797  ...      NaN                    False
+3  ElasticNet Regression     30919.903703  ...      NaN                    False
+4                    KNN     36932.573147  ...      NaN                    False
+5          Random Forest     21454.015396  ...      NaN                    False
+6      Gradient Boosting     26247.053016  ...      NaN                    False
+7                XGBoost     20013.057829  ...      NaN                    False
+
+[8 rows x 6 columns]
+----------------------- Visuals ------------------------
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-------------------------- The End ------------------------------
+/Users/KarenMarter/Desktop
+--------------Exploring & Cleaning the Dataset ----------------
+      Year     Sex  ...                               OriginalIndicator DATA
+0  2005/06  Person  ...  Heart and circulatory diseases (CVD) (I00-I99)  NaN
+1  2005/06  Person  ...               Coronary heart disease  (I20-I25)  NaN
+2  2005/06  Person  ...                 Myocardial infarction (I21-I22)  NaN
+3  2005/06  Person  ...                       Atrial fibrillation (I48)  NaN
+4  2005/06  Person  ...                             Heart Failure (I50)  NaN
+
+[5 rows x 8 columns]
+Index(['Year', 'Sex', 'Geography', 'Theme', 'RenamedIndicator',
+       'IndicatorForPython', 'OriginalIndicator', 'DATA'],
+      dtype='object')
+Year                  object
+Sex                   object
+Geography             object
+Theme                 object
+RenamedIndicator      object
+IndicatorForPython    object
+OriginalIndicator     object
+DATA                  object
+dtype: object
+['2005/06' '2006/07' '2007/08' '2008/09' '2009/10' '2010/11' '2011/12'
+ '2012/13' '2013/14' '2014/15' '2015/16' '2016/17' '2017/18' '2018/19'
+ '2019/20' '2020/21' '2021/22' '2008' '2009' '2010' '2011' '2012' '2013'
+ '2014' '2015' '2016' '2017' '2018' '2019' '2021' '1993' '1994' '1995'
+ '1996' '1997' '1998' '1999' '2000' '2001' '2002' '2003' '2004' '2005'
+ '2006' '2007' '2020']
+['Person' 'Male' 'Female' 'Persons' 'All']
+['England' 'Scotland' 'Wales' 'Northern Ireland' 'United Kingdom']
+['CVD' 'Atrial Fib' 'Smoking' 'Obesity' 'Activity / Exercise' 'Alcohol'
+ 'Diet' 'diet' 'Age' 'Diabetes']
+['CVD - All inpatient admission - Heart and circulatory diseases (CVD) (I00-I99)'
+ 'CVD - All inpatient admission - Coronary heart disease  (I20-I25)'
+ 'CVD - All inpatient admission - Myocardial infarction (I21-I22)'
+ 'CVD - All inpatient admission - Atrial fibrillation (I48)'
+ 'CVD - All inpatient admission - Heart Failure (I50)'
+ 'CVD - All inpatient admission - Stroke (I60-I69)'
+ 'CVD - All inpatient admission - Other cardiovascular disease (I00-99 only; not listed above)'
+ 'Atrial Fib - % of Atrial Fibrillation'
+ 'CVD - % Heart failure prevalence' 'CVD - % CVD prevalence'
+ 'Smoking - % Current Smokers' 'Smoking - % Ex-smokers '
+ 'Smoking - % Never smoked '
+ 'Obesity - Percentage of adults (aged 18 plus) classified as overweight or obese'
+ 'Obesity - Classified as obese'
+ 'Activity / Exercise - Percentage of physically active adults'
+ 'Activity / Exercise - Inactive - Percentage of physically active adults'
+ 'Alcohol - % Proportion who drank alcohol in the last week'
+ 'Alcohol - Alcohol consumption (mean weekly units)'
+ 'Smoking - Never smoked/Used to smoke occasionally - Smoking status'
+ 'Smoking - Used to smoke regularly - Smoking status'
+ 'Smoking - Current smoker - Smoking status'
+ 'CVD - Any cardiovascular condition'
+ 'Diet - Food insecurity (worried would run out of food) - Yes'
+ 'Diet - Food insecurity (worried would run out of food) - No'
+ 'Diet - Fruit & vegetable consumption (guidelines) - None'
+ 'Diet - Fruit & vegetable consumption (guidelines) - Less than 5 portions'
+ 'Diet - Fruit & vegetable consumption (guidelines) - 5 portions or more'
+ 'Obesity - Mean BMI' 'diet - Fruit & Vegetables (5+ portions per day)'
+ 'diet - Fruit & Vegetables - Average No. of portions per day'
+ 'Activity / Exercise - Summary activity levels - Meets recommendations'
+ 'Activity / Exercise - Summary activity levels - Low activity'
+ 'Activity / Exercise - Summary activity levels - Very low activity'
+ 'Atrial Fib - Diagnosed Atrial Fibrillation' 'Age - Median age (years)'
+ 'Age - Median age of death (years)'
+ 'Diabetes - Diabetes: QOF prevalence (17+ yrs)'
+ 'Diabetes - Percentage of people with type 1 diabetes who are male'
+ 'Diabetes - Percentage of people with type 1 diabetes who are female'
+ 'Diabetes - Percentage of people with type 2 diabetes who are male'
+ 'Diabetes - Percentage of people with type 2 diabetes who are female']
+['All Heart & Circulatory diseases %' 'Coronary Heart Disease %'
+ 'Myocardial infarction %' 'Atrial fibrillation %' 'Heart Failure %'
+ 'Stroke %' 'Other cardiovascular disease %'
+ 'Atrial Fib - % of Atrial Fibrillation' 'Current smoker %' 'Ex-smoker %'
+ 'Never smoked %' 'Overweight or obese adults %' 'Obese adults %'
+ 'Activity / Exercise - Percentage of physically active adults'
+ 'Activity / Exercise - Inactive - Percentage of physically active adults'
+ 'Alcohol - % Proportion who drank alcohol in the last week'
+ 'Alcohol - Alcohol consumption (mean weekly units)'
+ 'Never smoked % (other measure)' 'Ex-smoker % (other measure)'
+ 'Current smoker % (other measure)' 'CVD %'
+ 'Food insecurity (worried would run out of food) - Yes'
+ 'Food insecurity (worried would run out of food) - No'
+ 'Fruit & vegetable consumption (guidelines) - None'
+ 'Fruit & vegetable consumption (guidelines) - Less than 5 portions'
+ 'Fruit & Vegetables (5+ portions per day)' 'Obesity - Mean BMI'
+ 'Fruit & Vegetables - Average No. of portions per day'
+ 'Activity / Exercise - Summary activity levels - Low activity'
+ 'Activity / Exercise - Summary activity levels - Very low activity'
+ 'Atrial Fib - Diagnosed Atrial Fibrillation' 'Age - Median age (years)'
+ 'Age - Median age of death (years)' 'With Diabetes (both types) %'
+ 'With Diabetes (type 1) %' 'With Diabetes (type 2) %']
+['Heart and circulatory diseases (CVD) (I00-I99)'
+ 'Coronary heart disease  (I20-I25)' 'Myocardial infarction (I21-I22)'
+ 'Atrial fibrillation (I48)' 'Heart Failure (I50)' 'Stroke (I60-I69)'
+ 'Other cardiovascular disease (I00-99 only; not listed above)'
+ '% of Atrial Fibrillation' '% Heart failure prevalence'
+ '% CVD prevalence' '% Current Smokers' '% Ex-smokers ' '% Never smoked '
+ 'Percentage of adults (aged 18 plus) classified as overweight or obese'
+ 'Classified as obese' 'Percentage of physically active adults'
+ '% Proportion who drank alcohol in the last week'
+ 'Alcohol consumption (mean weekly units)' 'Smoking status'
+ 'Any cardiovascular condition'
+ 'Food insecurity (worried would run out of food)'
+ 'Fruit & vegetable consumption (guidelines)' 'Mean BMI'
+ 'Fruit & Vegetables (5+ portions per day)'
+ 'Fruit & Vegetables - Average No. of portions per day'
+ 'Summary activity levels' 'Diagnosed Atrial Fibrillation'
+ 'Median age (years)' 'Median age of death (years)'
+ 'Diabetes: QOF prevalence (17+ yrs)'
+ 'Percentage of people with type 1 diabetes who are male'
+ 'Percentage of people with type 1 diabetes who are female'
+ 'Percentage of people with type 2 diabetes who are male'
+ 'Percentage of people with type 2 diabetes who are female']
+[nan '54,249' '17,428' ... '44.14712' '44.14711695' '44.28523']
+[3 1 2]
+['2005' '2006' '2007' '2008' '2009' '2010' '2011' '2012' '2013' '2014'
+ '2015' '2016' '2017' '2018' '2019' '2020' '2021' '1993' '1994' '1995'
+ '1996' '1997' '1998' '1999' '2000' '2001' '2002' '2003' '2004']
+Year                    int64
+Sex                     int64
+Geography             float64
+Theme                  object
+RenamedIndicator       object
+IndicatorForPython     object
+OriginalIndicator      object
+DATA                  float64
+dtype: object
+Column Headings:
+Index(['Year', 'Sex', 'Geography', 'Theme', 'RenamedIndicator',
+       'IndicatorForPython', 'OriginalIndicator', 'DATA'],
+      dtype='object')
+
+Data Types:
+Exporting cleaned data to csv to check
+Exporting reshaped data to csv to check
+Proportion of non-missing cells for each column, split by 'Sex' and 'Geography' saved to /Users/KarenMarter/Desktop/proportions_by_sex_geography.csv
+Imputed DataFrame 'df_geography_1_copy_imputed_sex' has been saved to /Users/KarenMarter/Desktop/df_geography_1_copy_imputed_sex.csv
+No. of variables in England dataframe before dropping CVD related variables
+(45, 22)
+No. of variables in England dataframe after dropping CVD related variables
+(45, 17)
+Imputed DataFrame 'df_geography_2_copy_imputed_sex' has been saved to /Users/KarenMarter/Desktop/df_geography_2_copy_imputed_sex.csv
+No. of variables in Scotland dataframe before dropping CVD related variables
+(42, 28)
+No. of variables in Scotland dataframe after dropping CVD related variables
+(42, 23)
+------------- Feature Selection - Filter Method -------------
+Selected features for Geography 1:
+Index(['Sex', 'Other cardiovascular disease (count)', 'Stroke (count)'], dtype='object', name='IndicatorForPython')
+Selected features for Geography 2:
+Index([], dtype='object', name='IndicatorForPython')
+------------------ Feature Selection - Wrapper Method -------------------
+Geography 1 - Linear Regression: Optimal number of features: 10
+Geography 1 - Linear Regression: Feature Ranking:
+Year: 4
+Sex: 1
+Geography: 7
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - % Proportion who drank alcohol in the last week: 1
+Current smoker %: 3
+Ex-smoker %: 1
+Fruit & Vegetables (5+ portions per day): 2
+Fruit & Vegetables - Average No. of portions per day: 1
+Never smoked %: 1
+Obesity - Mean BMI: 1
+Other cardiovascular disease (count): 6
+Stroke (count): 5
+With Diabetes (type 1) %: 1
+With Diabetes (type 2) %: 1
+
+
+Geography 1 - Ridge Regression: Optimal number of features: 11
+Geography 1 - Ridge Regression: Feature Ranking:
+Year: 3
+Sex: 1
+Geography: 6
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - % Proportion who drank alcohol in the last week: 1
+Current smoker %: 2
+Ex-smoker %: 1
+Fruit & Vegetables (5+ portions per day): 1
+Fruit & Vegetables - Average No. of portions per day: 1
+Never smoked %: 1
+Obesity - Mean BMI: 1
+Other cardiovascular disease (count): 5
+Stroke (count): 4
+With Diabetes (type 1) %: 1
+With Diabetes (type 2) %: 1
+
+
+Geography 1 - Lasso Regression: Optimal number of features: 10
+Geography 1 - Lasso Regression: Feature Ranking:
+Year: 4
+Sex: 1
+Geography: 7
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - % Proportion who drank alcohol in the last week: 1
+Current smoker %: 3
+Ex-smoker %: 1
+Fruit & Vegetables (5+ portions per day): 2
+Fruit & Vegetables - Average No. of portions per day: 1
+Never smoked %: 1
+Obesity - Mean BMI: 1
+Other cardiovascular disease (count): 6
+Stroke (count): 5
+With Diabetes (type 1) %: 1
+With Diabetes (type 2) %: 1
+
+
+Geography 1 - ElasticNet Regression: Optimal number of features: 14
+Geography 1 - ElasticNet Regression: Feature Ranking:
+Year: 1
+Sex: 1
+Geography: 3
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - % Proportion who drank alcohol in the last week: 1
+Current smoker %: 1
+Ex-smoker %: 1
+Fruit & Vegetables (5+ portions per day): 1
+Fruit & Vegetables - Average No. of portions per day: 1
+Never smoked %: 1
+Obesity - Mean BMI: 1
+Other cardiovascular disease (count): 2
+Stroke (count): 1
+With Diabetes (type 1) %: 1
+With Diabetes (type 2) %: 1
+
+
+Geography 1 - Random Forest: Optimal number of features: 14
+Geography 1 - Random Forest: Feature Ranking:
+Year: 1
+Sex: 1
+Geography: 3
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - % Proportion who drank alcohol in the last week: 1
+Current smoker %: 1
+Ex-smoker %: 1
+Fruit & Vegetables (5+ portions per day): 1
+Fruit & Vegetables - Average No. of portions per day: 1
+Never smoked %: 2
+Obesity - Mean BMI: 1
+Other cardiovascular disease (count): 1
+Stroke (count): 1
+With Diabetes (type 1) %: 1
+With Diabetes (type 2) %: 1
+
+
+Geography 1 - Gradient Boosting: Optimal number of features: 13
+Geography 1 - Gradient Boosting: Feature Ranking:
+Year: 1
+Sex: 1
+Geography: 4
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - % Proportion who drank alcohol in the last week: 1
+Current smoker %: 1
+Ex-smoker %: 1
+Fruit & Vegetables (5+ portions per day): 1
+Fruit & Vegetables - Average No. of portions per day: 1
+Never smoked %: 1
+Obesity - Mean BMI: 2
+Other cardiovascular disease (count): 1
+Stroke (count): 1
+With Diabetes (type 1) %: 3
+With Diabetes (type 2) %: 1
+
+
+Geography 1 - XGBoost: Optimal number of features: 1
+Geography 1 - XGBoost: Feature Ranking:
+Year: 7
+Sex: 1
+Geography: 16
+Age - Median age (years): 2
+Age - Median age of death (years): 14
+Alcohol - % Proportion who drank alcohol in the last week: 6
+Current smoker %: 13
+Ex-smoker %: 8
+Fruit & Vegetables (5+ portions per day): 5
+Fruit & Vegetables - Average No. of portions per day: 11
+Never smoked %: 9
+Obesity - Mean BMI: 12
+Other cardiovascular disease (count): 4
+Stroke (count): 3
+With Diabetes (type 1) %: 15
+With Diabetes (type 2) %: 10
+
+
+Geography 2 - Linear Regression: Optimal number of features: 21
+Geography 2 - Linear Regression: Feature Ranking:
+Year: 1
+Sex: 1
+Geography: 2
+Activity / Exercise - Percentage of physically active adults: 1
+Activity / Exercise - Summary activity levels - Low activity: 1
+Activity / Exercise - Summary activity levels - Very low activity: 1
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - Alcohol consumption (mean weekly units): 1
+CVD %: 1
+Current smoker %: 1
+Current smoker % (other measure): 1
+Ex-smoker %: 1
+Ex-smoker % (other measure): 1
+Fruit & Vegetables (5+ portions per day): 1
+Fruit & vegetable consumption (guidelines) - Less than 5 portions: 1
+Fruit & vegetable consumption (guidelines) - None: 1
+Never smoked %: 1
+Never smoked % (other measure): 1
+Obese adults %: 1
+Other cardiovascular disease (count): 1
+Stroke (count): 1
+
+
+Geography 2 - Ridge Regression: Optimal number of features: 2
+Geography 2 - Ridge Regression: Feature Ranking:
+Year: 11
+Sex: 1
+Geography: 21
+Activity / Exercise - Percentage of physically active adults: 13
+Activity / Exercise - Summary activity levels - Low activity: 14
+Activity / Exercise - Summary activity levels - Very low activity: 15
+Age - Median age (years): 10
+Age - Median age of death (years): 1
+Alcohol - Alcohol consumption (mean weekly units): 12
+CVD %: 2
+Current smoker %: 9
+Current smoker % (other measure): 6
+Ex-smoker %: 17
+Ex-smoker % (other measure): 16
+Fruit & Vegetables (5+ portions per day): 8
+Fruit & vegetable consumption (guidelines) - Less than 5 portions: 5
+Fruit & vegetable consumption (guidelines) - None: 3
+Never smoked %: 18
+Never smoked % (other measure): 7
+Obese adults %: 4
+Other cardiovascular disease (count): 20
+Stroke (count): 19
+
+
+Geography 2 - Lasso Regression: Optimal number of features: 2
+Geography 2 - Lasso Regression: Feature Ranking:
+Year: 17
+Sex: 1
+Geography: 21
+Activity / Exercise - Percentage of physically active adults: 11
+Activity / Exercise - Summary activity levels - Low activity: 15
+Activity / Exercise - Summary activity levels - Very low activity: 16
+Age - Median age (years): 10
+Age - Median age of death (years): 1
+Alcohol - Alcohol consumption (mean weekly units): 9
+CVD %: 2
+Current smoker %: 13
+Current smoker % (other measure): 7
+Ex-smoker %: 14
+Ex-smoker % (other measure): 12
+Fruit & Vegetables (5+ portions per day): 5
+Fruit & vegetable consumption (guidelines) - Less than 5 portions: 4
+Fruit & vegetable consumption (guidelines) - None: 3
+Never smoked %: 18
+Never smoked % (other measure): 8
+Obese adults %: 6
+Other cardiovascular disease (count): 20
+Stroke (count): 19
+
+
+Geography 2 - ElasticNet Regression: Optimal number of features: 2
+Geography 2 - ElasticNet Regression: Feature Ranking:
+Year: 12
+Sex: 1
+Geography: 21
+Activity / Exercise - Percentage of physically active adults: 16
+Activity / Exercise - Summary activity levels - Low activity: 15
+Activity / Exercise - Summary activity levels - Very low activity: 9
+Age - Median age (years): 11
+Age - Median age of death (years): 1
+Alcohol - Alcohol consumption (mean weekly units): 14
+CVD %: 2
+Current smoker %: 8
+Current smoker % (other measure): 6
+Ex-smoker %: 17
+Ex-smoker % (other measure): 10
+Fruit & Vegetables (5+ portions per day): 18
+Fruit & vegetable consumption (guidelines) - Less than 5 portions: 5
+Fruit & vegetable consumption (guidelines) - None: 3
+Never smoked %: 13
+Never smoked % (other measure): 7
+Obese adults %: 4
+Other cardiovascular disease (count): 20
+Stroke (count): 19
+
+
+Geography 2 - Random Forest: Optimal number of features: 1
+Geography 2 - Random Forest: Feature Ranking:
+Year: 4
+Sex: 2
+Geography: 22
+Activity / Exercise - Percentage of physically active adults: 8
+Activity / Exercise - Summary activity levels - Low activity: 21
+Activity / Exercise - Summary activity levels - Very low activity: 10
+Age - Median age (years): 5
+Age - Median age of death (years): 6
+Alcohol - Alcohol consumption (mean weekly units): 13
+CVD %: 17
+Current smoker %: 11
+Current smoker % (other measure): 15
+Ex-smoker %: 7
+Ex-smoker % (other measure): 20
+Fruit & Vegetables (5+ portions per day): 18
+Fruit & vegetable consumption (guidelines) - Less than 5 portions: 12
+Fruit & vegetable consumption (guidelines) - None: 14
+Never smoked %: 9
+Never smoked % (other measure): 16
+Obese adults %: 19
+Other cardiovascular disease (count): 1
+Stroke (count): 3
+
+
+Geography 2 - Gradient Boosting: Optimal number of features: 1
+Geography 2 - Gradient Boosting: Feature Ranking:
+Year: 4
+Sex: 2
+Geography: 22
+Activity / Exercise - Percentage of physically active adults: 15
+Activity / Exercise - Summary activity levels - Low activity: 18
+Activity / Exercise - Summary activity levels - Very low activity: 20
+Age - Median age (years): 5
+Age - Median age of death (years): 6
+Alcohol - Alcohol consumption (mean weekly units): 12
+CVD %: 17
+Current smoker %: 7
+Current smoker % (other measure): 10
+Ex-smoker %: 8
+Ex-smoker % (other measure): 21
+Fruit & Vegetables (5+ portions per day): 13
+Fruit & vegetable consumption (guidelines) - Less than 5 portions: 14
+Fruit & vegetable consumption (guidelines) - None: 19
+Never smoked %: 9
+Never smoked % (other measure): 11
+Obese adults %: 16
+Other cardiovascular disease (count): 1
+Stroke (count): 3
+
+
+Geography 2 - XGBoost: Optimal number of features: 9
+Geography 2 - XGBoost: Feature Ranking:
+Year: 1
+Sex: 1
+Geography: 14
+Activity / Exercise - Percentage of physically active adults: 4
+Activity / Exercise - Summary activity levels - Low activity: 6
+Activity / Exercise - Summary activity levels - Very low activity: 5
+Age - Median age (years): 1
+Age - Median age of death (years): 1
+Alcohol - Alcohol consumption (mean weekly units): 1
+CVD %: 1
+Current smoker %: 1
+Current smoker % (other measure): 7
+Ex-smoker %: 1
+Ex-smoker % (other measure): 9
+Fruit & Vegetables (5+ portions per day): 11
+Fruit & vegetable consumption (guidelines) - Less than 5 portions: 10
+Fruit & vegetable consumption (guidelines) - None: 3
+Never smoked %: 13
+Never smoked % (other measure): 12
+Obese adults %: 8
+Other cardiovascular disease (count): 1
+Stroke (count): 2
+
+
+Best hyperparameters for df_geography_1_copy_imputed_sex:  {'activation': 'relu', 'alpha': 0.01, 'hidden_layer_sizes': (10,), 'learning_rate': 'adaptive', 'solver': 'adam'}
+Best score for df_geography_1_copy_imputed_sex:  -0.8859003217508981
+Best hyperparameters for df_geography_2_copy_imputed_sex:  {'activation': 'relu', 'alpha': 0.01, 'hidden_layer_sizes': (50,), 'learning_rate': 'constant', 'solver': 'adam'}
+Best score for df_geography_2_copy_imputed_sex:  -0.7541045112209124
+----------------- Neural Networks ------------------
+Geography 1 - Neural Network
+MAE:  35491.0838701736
+MSE:  1526040968.1512616
+R2:  0.971671639952826
+------------------------
+Geography 2 - Neural Network
+MAE:  13443.120376495015
+MSE:  366339364.6084586
+R2:  0.8804895999088571
+------------------------
+-------------------- SVM ---------------------
+Geography 1 - SVM
+MAE:  186577.78249398243
+MSE:  61245203756.83781
+R2:  -0.13691324112227865
+------------------------
+Geography 2 - SVM
+MAE:  25490.331152141243
+MSE:  3357935720.243226
+R2:  -0.09545487101972716
+------------------------
+--------------------- KNN ------------------------
+Geography 1 - KNN
+MAE:  28795.92457217988
+MSE:  5390610455.42294
+R2:  0.8999324677106932
+------------------------
+Geography 2 - KNN
+MAE:  9546.492246642247
+MSE:  1915517552.941233
+R2:  0.37510327513319086
+------------------------
+------------------------ Random Forest ---------------------------
+Geography 1 - Random Forest
+MAE:  7881.044464871655
+MSE:  295923158.94819915
+R2:  0.994506688897653
+------------------------
+Geography 2 - Random Forest
+MAE:  4101.509313681022
+MSE:  394768670.6726638
+R2:  0.8712151454813947
+------------------------
+------------------------ Gradient Boosting -----------------------
+Geography 1 - Gradient Boosting
+MAE: 0.44391423845146266
+MSE: 0.2968035509779864
+R2: 0.9999999999944903
+------------------------
+Geography 2 - Gradient Boosting
+MAE: 0.03775000351838355
+MSE: 0.001997711549921673
+R2: 0.9999999999993483
+------------------------
+--------------------- XGBoost ------------------------
+Geography 1 - XGBoost
+MAE:  539.6723110317433
+MSE:  588532.6357748302
+R2:  0.9999890748906788
+------------------------
+Geography 2 - XGBoost
+MAE:  78.54268734737464
+MSE:  127111.52913487026
+R2:  0.9999585325761556
+------------------------
+--------------- Comparing Model Performances ------------------
+Results saved to /Users/KarenMarter/Desktop/comparison_results.csv
+                    Model  ...                                 Feature Importance
+0       Linear Regression  ...                                               None
+1       Linear Regression  ...                                               None
+2        Ridge Regression  ...                                               None
+3        Ridge Regression  ...                                               None
+4        Lasso Regression  ...                                               None
+5        Lasso Regression  ...                                               None
+6   ElasticNet Regression  ...                                               None
+7   ElasticNet Regression  ...                                               None
+8                     KNN  ...                                               None
+9                     KNN  ...                                               None
+10          Random Forest  ...  {'Year': 0.00048357259225998957, 'Sex': 0.3364...
+11          Random Forest  ...  {'Year': 0.01716761143869629, 'Sex': 0.1603362...
+12      Gradient Boosting  ...  {'Year': 0.0005069188233991378, 'Sex': 0.43815...
+13      Gradient Boosting  ...  {'Year': 0.008489379640759976, 'Sex': 0.085059...
+14                XGBoost  ...  {'Year': 4.4326232e-05, 'Sex': 0.98690563, 'Ge...
+15                XGBoost  ...  {'Year': 0.0011715927, 'Sex': 0.4445141, 'Geog...
+
+[16 rows x 6 columns]
+-------------- Plotting Feature Importance ----------------
+Results saved to /Users/KarenMarter/Desktop/comparison_results_all_models.csv
+Feature importances saved to /Users/KarenMarter/Desktop/feature_importances_all_models.csv
+                   Model  Geography 1 MAE  ...  p-value  Statistically Different
+0      Linear Regression     24502.751089  ...      NaN                    False
+1       Ridge Regression     30496.330928  ...      NaN                    False
+2       Lasso Regression     24415.318797  ...      NaN                    False
+3  ElasticNet Regression     30919.903703  ...      NaN                    False
+4                    KNN     36932.573147  ...      NaN                    False
+5          Random Forest     21454.015396  ...      NaN                    False
+6      Gradient Boosting     26247.053016  ...      NaN                    False
+7                XGBoost     20013.057829  ...      NaN                    False
+
+[8 rows x 6 columns]
+
+Random Forest Feature Importances (Geography 1):
+                                                  Feature  Importance
+                     Other cardiovascular disease (count)    0.420686
+                                                      Sex    0.336483
+                                       Obesity - Mean BMI    0.182587
+                                 Age - Median age (years)    0.026462
+                                 With Diabetes (type 1) %    0.010026
+                 All Heart & Circulatory diseases (count)    0.004687
+                                           Stroke (count)    0.004307
+                 Fruit & Vegetables (5+ portions per day)    0.003729
+Alcohol - % Proportion who drank alcohol in the last week    0.003416
+                        Age - Median age of death (years)    0.003108
+                                           Never smoked %    0.002317
+                                              Ex-smoker %    0.000877
+                                                     Year    0.000484
+                                         Current smoker %    0.000444
+     Fruit & Vegetables - Average No. of portions per day    0.000387
+                                                Geography    0.000000
+
+Random Forest Feature Importances (Geography 2):
+                                                          Feature  Importance
+                                                   Obese adults %    0.634984
+                             Other cardiovascular disease (count)    0.161411
+                                                              Sex    0.160336
+                                                             Year    0.017168
+                                         Age - Median age (years)    0.008165
+                                Age - Median age of death (years)    0.007360
+                                                   Never smoked %    0.002342
+                                 Current smoker % (other measure)    0.001706
+Activity / Exercise - Summary activity levels - Very low activity    0.001215
+                Fruit & vegetable consumption (guidelines) - None    0.001041
+                Alcohol - Alcohol consumption (mean weekly units)    0.000937
+                                                            CVD %    0.000811
+Fruit & vegetable consumption (guidelines) - Less than 5 portions    0.000644
+     Activity / Exercise - Percentage of physically active adults    0.000636
+                                   Never smoked % (other measure)    0.000544
+                                                 Current smoker %    0.000340
+                         Fruit & Vegetables (5+ portions per day)    0.000158
+                         All Heart & Circulatory diseases (count)    0.000136
+                                      Ex-smoker % (other measure)    0.000046
+     Activity / Exercise - Summary activity levels - Low activity    0.000018
+                                                      Ex-smoker %    0.000003
+                                                        Geography    0.000000
+
+Gradient Boosting Feature Importances (Geography 1):
+                                                  Feature  Importance
+                     Other cardiovascular disease (count)    0.494300
+                                                      Sex    0.438150
+                                 Age - Median age (years)    0.061970
+                                 With Diabetes (type 1) %    0.001382
+                                         Current smoker %    0.001186
+                                       Obesity - Mean BMI    0.000851
+Alcohol - % Proportion who drank alcohol in the last week    0.000623
+                                                     Year    0.000507
+                        Age - Median age of death (years)    0.000490
+     Fruit & Vegetables - Average No. of portions per day    0.000254
+                 Fruit & Vegetables (5+ portions per day)    0.000095
+                 All Heart & Circulatory diseases (count)    0.000093
+                                              Ex-smoker %    0.000063
+                                           Stroke (count)    0.000019
+                                           Never smoked %    0.000016
+                                                Geography    0.000000
+
+Gradient Boosting Feature Importances (Geography 2):
+                                                          Feature  Importance
+                                                   Obese adults %    0.836036
+                                                              Sex    0.085060
+                             Other cardiovascular disease (count)    0.062682
+                                                             Year    0.008489
+                                Age - Median age of death (years)    0.003334
+                                         Age - Median age (years)    0.002604
+                Fruit & vegetable consumption (guidelines) - None    0.000858
+                                                            CVD %    0.000552
+                                 Current smoker % (other measure)    0.000258
+                                                 Current smoker %    0.000049
+                                                   Never smoked %    0.000040
+                                      Ex-smoker % (other measure)    0.000009
+                Alcohol - Alcohol consumption (mean weekly units)    0.000005
+                         Fruit & Vegetables (5+ portions per day)    0.000005
+     Activity / Exercise - Percentage of physically active adults    0.000004
+                                                      Ex-smoker %    0.000003
+Activity / Exercise - Summary activity levels - Very low activity    0.000003
+                         All Heart & Circulatory diseases (count)    0.000003
+     Activity / Exercise - Summary activity levels - Low activity    0.000003
+Fruit & vegetable consumption (guidelines) - Less than 5 portions    0.000002
+                                   Never smoked % (other measure)    0.000002
+                                                        Geography    0.000000
+
+XGBoost Feature Importances (Geography 1):
+                                                  Feature   Importance
+                                                      Sex 9.869056e-01
+                                 Age - Median age (years) 7.879507e-03
+                     Other cardiovascular disease (count) 3.428827e-03
+                                       Obesity - Mean BMI 9.950217e-04
+                                              Ex-smoker % 2.791530e-04
+Alcohol - % Proportion who drank alcohol in the last week 1.531582e-04
+                                         Current smoker % 1.270248e-04
+                                 With Diabetes (type 1) % 5.449523e-05
+                 Fruit & Vegetables (5+ portions per day) 5.055287e-05
+                                                     Year 4.432623e-05
+     Fruit & Vegetables - Average No. of portions per day 3.987906e-05
+                                           Never smoked % 2.800176e-05
+                 All Heart & Circulatory diseases (count) 8.880742e-06
+                        Age - Median age of death (years) 5.430614e-06
+                                           Stroke (count) 7.605686e-08
+                                                Geography 0.000000e+00
+
+XGBoost Feature Importances (Geography 2):
+                                                          Feature   Importance
+                                                              Sex 4.445141e-01
+                                                   Obese adults % 2.908861e-01
+                         All Heart & Circulatory diseases (count) 2.488427e-01
+                                                            CVD % 9.088816e-03
+                                         Age - Median age (years) 2.459500e-03
+                                Age - Median age of death (years) 2.105153e-03
+                                                             Year 1.171593e-03
+                                 Current smoker % (other measure) 4.313946e-04
+                             Other cardiovascular disease (count) 3.350385e-04
+                Alcohol - Alcohol consumption (mean weekly units) 1.371924e-04
+     Activity / Exercise - Percentage of physically active adults 1.047712e-05
+Fruit & vegetable consumption (guidelines) - Less than 5 portions 6.023089e-06
+Activity / Exercise - Summary activity levels - Very low activity 5.074952e-06
+                                                 Current smoker % 2.651836e-06
+                                   Never smoked % (other measure) 1.782956e-06
+                                                      Ex-smoker % 1.155048e-06
+     Activity / Exercise - Summary activity levels - Low activity 9.086734e-07
+                         Fruit & Vegetables (5+ portions per day) 3.670042e-07
+                                      Ex-smoker % (other measure) 2.100093e-08
+                                                   Never smoked % 3.677441e-10
+                Fruit & vegetable consumption (guidelines) - None 1.099901e-12
+                                                        Geography 0.000000e+00
+----------------------- Visuals ------------------------
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-Evaluate Models part of Heatmap-
+                    Model  Geography           MAE           MSE         R2
+0       Linear Regression          1  24502.751089  4.142343e+09   0.917209
+1       Linear Regression          2  22189.418256  2.200318e+09   0.073747
+2        Ridge Regression          1  30496.330928  6.221074e+09   0.875717
+3        Ridge Regression          2  27056.952595  3.389095e+09  -0.547375
+4        Lasso Regression          1  24415.318797  3.986877e+09   0.920274
+5        Lasso Regression          2  21825.160299  2.368378e+09   0.161517
+6   ElasticNet Regression          1  30919.903703  5.991036e+09   0.880308
+7   ElasticNet Regression          2  28802.784511  3.530358e+09  -0.689425
+8                     KNN          1  36932.573147  7.343558e+09   0.851786
+9                     KNN          2  13618.197500  2.699139e+09   0.420927
+10          Random Forest          1  21454.015396  1.584551e+09   0.967818
+11          Random Forest          2  20332.062990  3.137276e+09  -2.144256
+12      Gradient Boosting          1  26247.053016  2.039476e+09   0.957094
+13      Gradient Boosting          2  24925.688257  4.725420e+09  -6.121121
+14                XGBoost          1  20013.057829  1.029290e+09   0.979771
+15                XGBoost          2  38585.315955  1.067828e+10 -22.333000
+-------------------------- The End ------------------------------
