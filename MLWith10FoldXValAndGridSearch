@@ -1012,10 +1012,12 @@ print_to_both("R2: ", sum(r2_geo2) / len(r2_geo2))
 print_to_both("------------------------")
 
 # Random Forest with grid search and 10-fold cross-validation
+# Random Forest with grid search and 10-fold cross-validation
 print_to_both('------ Random Forest with Grid Search and 10-fold Cross-Validation ------')
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import KFold, GridSearchCV
+import matplotlib.pyplot as plt
 
 # Define the target variable
 target_var = "All Heart & Circulatory diseases (count)"
@@ -1039,20 +1041,46 @@ gs_geo1.fit(X_geo1, y_geo1)
 gs_geo2 = GridSearchCV(estimator=rf, param_grid=param_grid, scoring='neg_mean_squared_error', cv=kf)
 gs_geo2.fit(X_geo2, y_geo2)
 
+# Generate predictions and residuals for geography 1
+y_pred_geo1 = gs_geo1.predict(X_geo1)
+resid_geo1 = y_geo1 - y_pred_geo1
+
+# Generate predictions and residuals for geography 2
+y_pred_geo2 = gs_geo2.predict(X_geo2)
+resid_geo2 = y_geo2 - y_pred_geo2
+
+# Check model assumptions for geography 1
+plt.scatter(y_pred_geo1, resid_geo1)
+plt.axhline(y=0, color='r', linestyle='-')
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.title('Residual Analysis for Geography 1')
+plt.savefig('residual_analysis_geo1.png')  # Save the plot as a PNG file
+plt.show()
+
+# Check model assumptions for geography 2
+plt.scatter(y_pred_geo2, resid_geo2)
+plt.axhline(y=0, color='r', linestyle='-')
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.title('Residual Analysis for Geography 2')
+plt.savefig('residual_analysis_geo2.png')  # Save the plot as a PNG file
+plt.show()
+
 # Print the best parameters and average performance metrics for geography 1 (cross-validated)
 print_to_both("Geography 1 - Random Forest (Grid Search and 10-fold Cross-Validation)")
 print_to_both("Best Parameters: ", gs_geo1.best_params_)
-print_to_both("MAE: ", mean_absolute_error(y_geo1, gs_geo1.predict(X_geo1)))
-print_to_both("MSE: ", mean_squared_error(y_geo1, gs_geo1.predict(X_geo1)))
-print_to_both("R2: ", r2_score(y_geo1, gs_geo1.predict(X_geo1)))
+print_to_both("MAE: ", mean_absolute_error(y_geo1, y_pred_geo1))
+print_to_both("MSE: ", mean_squared_error(y_geo1, y_pred_geo1))
+print_to_both("R2: ", r2_score(y_geo1, y_pred_geo1))
 print_to_both("------------------------")
 
 # Print the best parameters and average performance metrics for geography 2 (cross-validated)
 print_to_both("Geography 2 - Random Forest (Grid Search and 10-fold Cross-Validation)")
 print_to_both("Best Parameters: ", gs_geo2.best_params_)
-print_to_both("MAE: ", mean_absolute_error(y_geo2, gs_geo2.predict(X_geo2)))
-print_to_both("MSE: ", mean_squared_error(y_geo2, gs_geo2.predict(X_geo2)))
-print_to_both("R2: ", r2_score(y_geo2, gs_geo2.predict(X_geo2)))
+print_to_both("MAE: ", mean_absolute_error(y_geo2, y_pred_geo2))
+print_to_both("MSE: ", mean_squared_error(y_geo2, y_pred_geo2))
+print_to_both("R2: ", r2_score(y_geo2, y_pred_geo2))
 print_to_both("------------------------")
 
 # Gradient Boosting
@@ -1306,25 +1334,10 @@ print_to_both("R2: ", sum(r2_geo2) / len(r2_geo2))
 print_to_both("------------------------")
 
 # XGBoost with Grid Search and 10-fold Cross-Validation
-print_to_both('------ XGBoost with Grid Search and 10-fold Cross-Validation ------')
-from xgboost import XGBRegressor
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-from sklearn.model_selection import KFold, GridSearchCV
-
-# Define the target variable
-target_var = "All Heart & Circulatory diseases (count)"
-
-# Define the XGBoost model
-xgb = XGBRegressor(random_state=42)
-
-# Define the parameter grid for grid search
-param_grid = {'n_estimators': [50, 100, 150],
-              'max_depth': [3, 5, 7],
-              'learning_rate': [0.01, 0.1, 1.0],
-              'gamma': [0.0, 0.1, 0.5]}
-
-# Initialize the KFold object
-kf = KFold(n_splits=10, shuffle=True, random_state=42)
+from xgboost import plot_importance
+import seaborn as sns
+from statsmodels.graphics.gofplots import qqplot
+import statsmodels.api as sm
 
 # Perform grid search with cross-validation for Geography 1
 gs_geo1 = GridSearchCV(estimator=xgb, param_grid=param_grid, scoring='neg_mean_squared_error', cv=kf)
@@ -1349,6 +1362,62 @@ print_to_both("MAE: ", -gs_geo2.best_score_)
 print_to_both("MSE: ", mean_squared_error(y_geo2, gs_geo2.predict(X_geo2)))
 print_to_both("R2: ", r2_score(y_geo2, gs_geo2.predict(X_geo2)))
 print_to_both("------------------------")
+
+# Check model assumptions for Geography 1
+print_to_both("Geography 1 - XGBoost Model Assumptions Check")
+
+# Feature importance plot
+plot_importance(gs_geo1.best_estimator_)
+plt.title('Feature Importance - XGBoost - Geography 1')
+plt.savefig('feature_importance_geo1_xgb.png')
+plt.show()
+
+# Residual plot
+sns.residplot(x=gs_geo1.predict(X_geo1), y=y_geo1, lowess=True, line_kws={'color': 'red'})
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.title('Residual Analysis for Geography 1')
+plt.savefig('residual_analysis_seaborn_geo1_xgb.png')
+plt.show()
+
+# Q-Q plot
+qqplot(gs_geo1.predict(X_geo1) - y_geo1, line='s')
+plt.title("Q-Q Plot - XGBoost - Geography 1")
+plt.savefig("qq_plot_geo1_xgb.png")
+plt.show()
+
+# Check model assumptions for Geography 2
+print_to_both("Geography 2 - XGBoost Model Assumptions Check")
+
+# Feature importance plot
+plot_importance(gs_geo2.best_estimator_)
+plt.title('Feature Importance - XGBoost - Geography 2')
+plt.savefig('feature_importance_geo2_xgb.png')
+plt.show()
+
+# Residual plot
+sns.residplot(x=gs_geo2.predict(X_geo2), y=y_geo2, lowess=True, line_kws={'color': 'red'})
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.title('Residual Analysis for Geography 2')
+plt.savefig('residual_analysis_seaborn_geo2_xgb.png')
+plt.show()
+
+# Q-Q plot
+sm.qqplot(gs_geo2.predict(X_geo2) - y_geo2, line='45')
+plt.title("Q-Q Plot - XGBoost - Geography 2")
+plt.savefig("qq_plot_geo2_xgb.png")
+plt.show()
+
+# Histogram of residuals
+plt.figure(figsize=(10, 6))
+plt.hist(gs_geo2.predict(X_geo2) - y_geo2, bins=50)
+plt.title("Histogram of Residuals - XGBoost - Geography 2")
+plt.xlabel("Residuals")
+plt.ylabel("Frequency")
+plt.savefig("histogram_resid_geo2_xgb.png")
+plt.show()
+
 
 # Linear Regression
 # Linear Regression
@@ -1458,8 +1527,7 @@ target_var = "All Heart & Circulatory diseases (count)"
 lr = LinearRegression()
 
 # Define the parameter grid for grid search
-param_grid = {'fit_intercept': [True, False],
-              'normalize': [True, False]}
+param_grid = {'fit_intercept': [True, False]}
 
 # Initialize the KFold object
 kf = KFold(n_splits=10, shuffle=True, random_state=42)
