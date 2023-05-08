@@ -738,6 +738,54 @@ print_to_both("MSE: ", -grid_search.cv_results_['mean_test_score'][grid_search.b
 print_to_both("R2: ", grid_search.cv_results_['mean_test_score'][grid_search.best_index_])
 print_to_both("------------------------")
 
+# Neural Networks
+# Grid search & 10-fold cross validation
+print_to_both('------ Neural Network with Grid Search and 10-fold Cross-Validation ------')
+from sklearn.neural_network import MLPRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.model_selection import KFold, GridSearchCV
+
+# Define the target variable
+target_var = "All Heart & Circulatory diseases (count)"
+
+# Define the neural network model
+nn = MLPRegressor(activation='relu', solver='adam', random_state=42)
+
+# Define the hyperparameter grid for grid search
+param_grid = {
+    'hidden_layer_sizes': [(50,),(100,),(150,)],
+    'alpha': [0.0001, 0.001, 0.01],
+    'learning_rate_init': [0.001, 0.01, 0.1]
+}
+
+# Initialize the KFold object
+kf = KFold(n_splits=10, shuffle=True, random_state=42)
+
+# Initialize the GridSearchCV object
+grid_search = GridSearchCV(nn, param_grid, cv=kf, scoring='neg_mean_absolute_error')
+
+# Fit the GridSearchCV object on geography 1 data
+grid_search.fit(X_geo1, y_geo1)
+
+# Print the best hyperparameters and performance metrics for geography 1
+print_to_both("Geography 1 - Neural Network (Grid Search and 10-fold Cross-Validation)")
+print_to_both("Best Parameters: ", grid_search.best_params_)
+print_to_both("MAE: ", -grid_search.best_score_)
+print_to_both("MSE: ", -grid_search.cv_results_['mean_test_score'][grid_search.best_index_])
+print_to_both("R2: ", grid_search.cv_results_['mean_test_score'][grid_search.best_index_])
+print_to_both("------------------------")
+
+# Fit the GridSearchCV object on geography 2 data
+grid_search.fit(X_geo2, y_geo2)
+
+# Print the best hyperparameters and performance metrics for geography 2
+print_to_both("Geography 2 - Neural Network (Grid Search and 10-fold Cross-Validation)")
+print_to_both("Best Parameters: ", grid_search.best_params_)
+print_to_both("MAE: ", -grid_search.best_score_)
+print_to_both("MSE: ", -grid_search.cv_results_['mean_test_score'][grid_search.best_index_])
+print_to_both("R2: ", grid_search.cv_results_['mean_test_score'][grid_search.best_index_])
+print_to_both("------------------------")
+
 # KNN
 print_to_both('--------------------- KNN ------------------------')
 from sklearn.neighbors import KNeighborsRegressor
@@ -1111,7 +1159,7 @@ from sklearn.model_selection import KFold
 target_var = "All Heart & Circulatory diseases (count)"
 
 # Define the Gradient Boosting model with chosen hyperparameters
-gb = GradientBoostingRegressor(n_estimators=100, max_depth=10, learning_rate=0.1, loss='ls', random_state=42)
+gb = GradientBoostingRegressor(n_estimators=100, max_depth=10, learning_rate=0.1, loss='squared_error', random_state=42)
 
 # Initialize the KFold object
 kf = KFold(n_splits=10, shuffle=True, random_state=42)
