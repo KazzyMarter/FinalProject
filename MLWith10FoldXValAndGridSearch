@@ -1350,10 +1350,156 @@ print_to_both("MSE: ", mean_squared_error(y_geo2, gs_geo2.predict(X_geo2)))
 print_to_both("R2: ", r2_score(y_geo2, gs_geo2.predict(X_geo2)))
 print_to_both("------------------------")
 
+# Linear Regression
+# Linear Regression
+print_to_both('--------------------- Linear Regression ------------------------')
+from sklearn.linear_model import LinearRegression
 
+# Define the target variable
+target_var = "All Heart & Circulatory diseases (count)"
+
+# Define the features and target variables for geography 1
+X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
+y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
+
+# Define the Linear Regression model
+lr = LinearRegression()
+
+# Fit the model to the data for geography 1
+lr.fit(X_geo1, y_geo1)
+
+# Print the performance metrics for geography 1
+print_to_both("Geography 1 - Linear Regression")
+print_to_both("MAE: ", mean_absolute_error(y_geo1, lr.predict(X_geo1)))
+print_to_both("MSE: ", mean_squared_error(y_geo1, lr.predict(X_geo1)))
+print_to_both("R2: ", r2_score(y_geo1, lr.predict(X_geo1)))
+print_to_both("------------------------")
+
+# Geography 2
+# Define the features and target variables for geography 2
+X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
+y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
+
+# Fit the model to the data for geography 2
+lr.fit(X_geo2, y_geo2)
+
+# Print the performance metrics for geography 2
+print_to_both("Geography 2 - Linear Regression")
+print_to_both("MAE: ", mean_absolute_error(y_geo2, lr.predict(X_geo2)))
+print_to_both("MSE: ", mean_squared_error(y_geo2, lr.predict(X_geo2)))
+print_to_both("R2: ", r2_score(y_geo2, lr.predict(X_geo2)))
+print_to_both("------------------------")
+
+# Linear Regression with 10-fold Cross Validation
+# Linear Regression with 10-fold cross-validation
+
+from sklearn.linear_model import LinearRegression
+
+# Define the Linear Regression model
+lr = LinearRegression()
+
+# Define the 10-fold cross-validation
+kfold = KFold(n_splits=10, shuffle=True, random_state=42)
+
+# Perform cross-validation for geography 1
+mae_geo1 = []
+mse_geo1 = []
+r2_geo1 = []
+
+for train_index, test_index in kfold.split(X_geo1):
+    X_train, X_test = X_geo1[train_index], X_geo1[test_index]
+    y_train, y_test = y_geo1[train_index], y_geo1[test_index]
+
+    lr.fit(X_train, y_train)
+
+    mae_geo1.append(mean_absolute_error(y_test, lr.predict(X_test)))
+    mse_geo1.append(mean_squared_error(y_test, lr.predict(X_test)))
+    r2_geo1.append(r2_score(y_test, lr.predict(X_test)))
+
+# Print the average performance metrics for geography 1 (cross-validated)
+print_to_both("Geography 1 - Linear Regression (10-fold Cross-Validation)")
+print_to_both("MAE: ", sum(mae_geo1) / len(mae_geo1))
+print_to_both("MSE: ", sum(mse_geo1) / len(mse_geo1))
+print_to_both("R2: ", sum(r2_geo1) / len(r2_geo1))
+print_to_both("------------------------")
+
+# Perform cross-validation for geography 2
+mae_geo2 = []
+mse_geo2 = []
+r2_geo2 = []
+
+for train_index, test_index in kfold.split(X_geo2):
+    X_train, X_test = X_geo2[train_index], X_geo2[test_index]
+    y_train, y_test = y_geo2[train_index], y_geo2[test_index]
+
+    lr.fit(X_train, y_train)
+
+    mae_geo2.append(mean_absolute_error(y_test, lr.predict(X_test)))
+    mse_geo2.append(mean_squared_error(y_test, lr.predict(X_test)))
+    r2_geo2.append(r2_score(y_test, lr.predict(X_test)))
+
+# Print the average performance metrics for geography 2 (cross-validated)
+print_to_both("Geography 2 - Linear Regression (10-fold Cross-Validation)")
+print_to_both("MAE: ", sum(mae_geo2) / len(mae_geo2))
+print_to_both("MSE: ", sum(mse_geo2) / len(mse_geo2))
+print_to_both("R2: ", sum(r2_geo2) / len(r2_geo2))
+print_to_both("------------------------")
+
+# Linear Regression with 10-fold Cross Validation & Grid Search
+print_to_both('------ XGBoost with Grid Search and 10-fold Cross-Validation ------')
+from xgboost import XGBRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.model_selection import KFold, GridSearchCV
+
+# Define the target variable
+target_var = "All Heart & Circulatory diseases (count)"
+
+# Define the XGBoost model
+xgb = XGBRegressor(random_state=42)
+
+# Define the parameter grid for grid search
+param_grid = {'n_estimators': [50, 100, 150],
+              'max_depth': [3, 5, 7],
+              'learning_rate': [0.01, 0.1, 1.0],
+              'gamma': [0.0, 0.1, 0.5]}
+
+# Initialize the KFold object
+kf = KFold(n_splits=10, shuffle=True, random_state=42)
+
+# Define the features and target variables for geography 1
+X_geo1 = df_geography_1_copy_imputed_sex.drop(columns=target_var).values
+y_geo1 = df_geography_1_copy_imputed_sex[target_var].values
+
+# Perform grid search with cross-validation for Geography 1
+gs_geo1 = GridSearchCV(estimator=xgb, param_grid=param_grid, scoring='neg_mean_squared_error', cv=kf)
+gs_geo1.fit(X_geo1, y_geo1)
+
+# Print the best parameters and average performance metrics for geography 1 (cross-validated)
+print_to_both("Geography 1 - XGBoost (Grid Search and 10-fold Cross-Validation)")
+print_to_both("Best Parameters: ", gs_geo1.best_params_)
+print_to_both("MAE: ", -gs_geo1.best_score_)
+print_to_both("MSE: ", mean_squared_error(y_geo1, gs_geo1.predict(X_geo1)))
+print_to_both("R2: ", r2_score(y_geo1, gs_geo1.predict(X_geo1)))
+print_to_both("------------------------")
+
+# Define the features and target variables for geography 2
+X_geo2 = df_geography_2_copy_imputed_sex.drop(columns=target_var).values
+y_geo2 = df_geography_2_copy_imputed_sex[target_var].values
+
+# Perform grid search with cross-validation for Geography 2
+gs_geo2 = GridSearchCV(estimator=xgb, param_grid=param_grid, scoring='neg_mean_squared_error', cv=kf)
+gs_geo2.fit(X_geo2, y_geo2)
+
+# Print the best parameters and average performance metrics for geography 2 (cross-validated)
+print_to_both("Geography 2 - XGBoost (Grid Search and 10-fold Cross-Validation)")
+print_to_both("Best Parameters: ", gs_geo2.best_params_)
+print_to_both("MAE: ", -gs_geo2.best_score_)
+print_to_both("MSE: ", mean_squared_error(y_geo2, gs_geo2.predict(X_geo2)))
+print_to_both("R2: ", r2_score(y_geo2, gs_geo2.predict(X_geo2)))
+print_to_both("------------------------")
 
 # Compare performance across all models
-print_to_both('--------------- Comparing Model Performances ------------------')
+print_to_both('--------------- Comparing Model Performances (Cross Val) ------------------')
 # Define the target variable
 # Define the target variable
 target_var = "All Heart & Circulatory diseases (count)"
